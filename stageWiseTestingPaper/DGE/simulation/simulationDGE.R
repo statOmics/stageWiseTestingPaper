@@ -223,28 +223,43 @@ mean(resultsMatSW10Limma[,"powerInteractionSW"]-resultsMatRegular10Limma[,"power
 
 ## main effects contrasts
 #t1
+boxplot(cbind(resultsMatRegular01[,"powerT1"],resultsMatSW01[,"powerT1SW"],
+	      resultsMatRegular05[,"powerT1"],resultsMatSW05[,"powerT1SW"],
+	      resultsMatRegular10[,"powerT1"],resultsMatSW10[,"powerT1SW"]),
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power t1", main="edgeR")
+axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
+abline(v=c(0.7,1.5),col=alpha("grey",.8))
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=.8, lwd=2)
+
 boxplot(cbind(resultsMatRegular01Limma[,"powerT1"],resultsMatSW01Limma[,"powerT1SW"],
 	      resultsMatRegular05Limma[,"powerT1"],resultsMatSW05Limma[,"powerT1SW"],
 	      resultsMatRegular10Limma[,"powerT1"],resultsMatSW10Limma[,"powerT1SW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power t1", main="")
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power t1", main="limma")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
 legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=.8, lwd=2)
 
 #t2
-boxplot(cbind(resultsMatRegular01Limma[,"powerT2"],resultsMatSW01Limma[,"powerT2SW"],
-	      resultsMatRegular05Limma[,"powerT2"],resultsMatSW05Limma[,"powerT2SW"],
-	      resultsMatRegular10Limma[,"powerT2"],resultsMatSW10Limma[,"powerT2SW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power t2", main="")
+boxplot(cbind(resultsMatRegular01[,"powerT2"],resultsMatSW01[,"powerT2SW"],
+	      resultsMatRegular05[,"powerT2"],resultsMatSW05[,"powerT2SW"],
+	      resultsMatRegular10[,"powerT2"],resultsMatSW10[,"powerT2SW"]),
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power t2", main="edgeR")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
 legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=.8, lwd=2)
 
 
+boxplot(cbind(resultsMatRegular01Limma[,"powerT2"],resultsMatSW01Limma[,"powerT2SW"],
+	      resultsMatRegular05Limma[,"powerT2"],resultsMatSW05Limma[,"powerT2SW"],
+	      resultsMatRegular10Limma[,"powerT2"],resultsMatSW10Limma[,"powerT2SW"]),
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power t2", main="limma")
+axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
+abline(v=c(0.7,1.5),col=alpha("grey",.8))
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=.8, lwd=2)
+
 dev.off()
 
 ### same but with three replicates.
-source("/Users/koenvandenberge/Dropbox/PhD/Research/stageWiseTesting/githubPaper/stageWiseTestingPaper/DGE/simulation/simulationDGE_helpFunctions.R")
 N=30
 nreps <- 3
 nCst <- 2000
@@ -439,22 +454,38 @@ mean(resultsMatSW05Limma[,"powerInteractionSW"]-resultsMatRegular05Limma[,"power
 mean(resultsMatSW10Limma[,"powerInteractionSW"]-resultsMatRegular10Limma[,"powerInteraction"])
 
 
-
 ## main effects contrasts
 #t1
+boxplot(cbind(resultsMatRegular01[,"powerT1"],resultsMatSW01[,"powerT1SW"],
+	      resultsMatRegular05[,"powerT1"],resultsMatSW05[,"powerT1SW"],
+	      resultsMatRegular10[,"powerT1"],resultsMatSW10[,"powerT1SW"]),
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power t1", main="edgeR")
+axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
+abline(v=c(0.7,1.5),col=alpha("grey",.8))
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=.8, lwd=2)
+
 boxplot(cbind(resultsMatRegular01Limma[,"powerT1"],resultsMatSW01Limma[,"powerT1SW"],
 	      resultsMatRegular05Limma[,"powerT1"],resultsMatSW05Limma[,"powerT1SW"],
 	      resultsMatRegular10Limma[,"powerT1"],resultsMatSW10Limma[,"powerT1SW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power t1", main="")
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power t1", main="limma")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
 legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=.8, lwd=2)
 
 #t2
+boxplot(cbind(resultsMatRegular01[,"powerT2"],resultsMatSW01[,"powerT2SW"],
+	      resultsMatRegular05[,"powerT2"],resultsMatSW05[,"powerT2SW"],
+	      resultsMatRegular10[,"powerT2"],resultsMatSW10[,"powerT2SW"]),
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power t2", main="edgeR")
+axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
+abline(v=c(0.7,1.5),col=alpha("grey",.8))
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=.8, lwd=2)
+
+
 boxplot(cbind(resultsMatRegular01Limma[,"powerT2"],resultsMatSW01Limma[,"powerT2SW"],
 	      resultsMatRegular05Limma[,"powerT2"],resultsMatSW05Limma[,"powerT2SW"],
 	      resultsMatRegular10Limma[,"powerT2"],resultsMatSW10Limma[,"powerT2SW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power t2", main="")
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power t2", main="limma")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
 legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=.8, lwd=2)
