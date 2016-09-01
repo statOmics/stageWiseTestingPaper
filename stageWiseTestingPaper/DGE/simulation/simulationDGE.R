@@ -1,4 +1,4 @@
-setwd("/Users/koenvandenberge/Dropbox/PhD/Research/stageWiseTesting/DGENew/")
+setwd("/Users/koenvandenberge/Dropbox/PhD/Research/stageWiseTesting/githubPaper/stageWiseTestingPaper/DGE/simulation")
 source("http://130.60.190.4/robinson_lab/edgeR_robust/robust_simulation.R")
 library(scales)
 ## pickrell simulation: original
@@ -155,7 +155,7 @@ boxplot(cbind(resultsMatRegular01[,"fdrAllHyp"],resultsMatSW01[,"fdrAllHypSW"],
 	      resultsMatRegular01[,"nullGeneFDR"],resultsMatSW01[,"nullGeneFDRSW"],
 	      resultsMatRegular05[,"nullGeneFDR"],resultsMatSW05[,"nullGeneFDRSW"],
 	      resultsMatRegular10[,"nullGeneFDR"],resultsMatSW10[,"nullGeneFDRSW"]),
-	boxwex=.2,at=rep(seq(0.3,6.7,by=0.8),each=2)+rep(c(-.1,.1),9), border=rep(c("black","steelblue"),9), col=alpha(rep(c("black","steelblue"),9),.2), xaxt="n", yaxt="n", ylab="False Discovery Rate", main=paste("edgeR","nCst",nCst,"nT1",nT1,"nT2",nT2,"nInt",nInt,"FC 2"))
+	boxwex=.2,at=rep(seq(0.3,6.7,by=0.8),each=2)+rep(c(-.1,.1),9), border=rep(c("black","steelblue"),9), col=alpha(rep(c("black","steelblue"),9),.2), xaxt="n", yaxt="n", ylab="Empirical false discovery rate", main="edgeR analysis", xlab="False discovery rate cut-off")
 axis(2,at=c(0.01,0.05,0.1))
 axis(1,at=c(seq(0.3,6.7,by=0.8)), labels=rep(c("1%","5%","10%"),3))
 abline(v=c(2.3,4.7),col=alpha("grey",.8))
@@ -168,9 +168,10 @@ lines(x=c(4.1,4.5),y=rep(0.1,each=2),col=2,lty=2)
 lines(x=c(4.9,5.3),y=rep(0.01,each=2),col=2,lty=2)
 lines(x=c(5.7,6.1),y=rep(0.05,each=2),col=2,lty=2)
 lines(x=c(6.5,6.9),y=rep(0.1,each=2),col=2,lty=2)
-text(x=0.25,y=0.1,"All Hypotheses")
-text(x=3,y=0.1,"Gene level")
-text(x=5.6,y=0.1,"Null gene level")
+text(x=0.25,y=0.12,"all hypotheses")
+text(x=3,y=0.12,"OFDR")
+text(x=5.6,y=0.12,"null gene OFDR")
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=.8, lwd=2)
 
 
 boxplot(cbind(resultsMatRegular01Limma[,"fdrAllHyp"],resultsMatSW01Limma[,"fdrAllHypSW"],
@@ -182,7 +183,7 @@ boxplot(cbind(resultsMatRegular01Limma[,"fdrAllHyp"],resultsMatSW01Limma[,"fdrAl
 	      resultsMatRegular01Limma[,"nullGeneFDR"],resultsMatSW01Limma[,"nullGeneFDRSW"],
 	      resultsMatRegular05Limma[,"nullGeneFDR"],resultsMatSW05Limma[,"nullGeneFDRSW"],
 	      resultsMatRegular10Limma[,"nullGeneFDR"],resultsMatSW10Limma[,"nullGeneFDRSW"]),
-	boxwex=.2,at=rep(seq(0.3,6.7,by=0.8),each=2)+rep(c(-.1,.1),9), border=rep(c("black","steelblue"),9), col=alpha(rep(c("black","steelblue"),9),.2), xaxt="n", yaxt="n", ylab="Empirical false discovery rate", main="", xlab="False discovery rate cut-off")
+	boxwex=.2,at=rep(seq(0.3,6.7,by=0.8),each=2)+rep(c(-.1,.1),9), border=rep(c("black","steelblue"),9), col=alpha(rep(c("black","steelblue"),9),.2), xaxt="n", yaxt="n", ylab="Empirical false discovery rate", main="limma analysis", xlab="False discovery rate cut-off")
 axis(2,at=c(0.01,0.05,0.1))
 axis(1,at=c(seq(0.3,6.7,by=0.8)), labels=rep(c("1%","5%","10%"),3))
 abline(v=c(2.3,4.7),col=alpha("grey",.8))
@@ -205,33 +206,20 @@ boxplot(cbind(resultsMatRegular01[,"powerInteraction"],resultsMatSW01[,"powerInt
 	      resultsMatRegular10[,"powerInteraction"],resultsMatSW10[,"powerInteractionSW"]),
 	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power Interaction effect", main="edgeR")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
+abline(v=c(0.7,1.5),col=alpha("grey",.8))
 legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=.8, lwd=2)
 
 
 boxplot(cbind(resultsMatRegular01Limma[,"powerInteraction"],resultsMatSW01Limma[,"powerInteractionSW"],
 	      resultsMatRegular05Limma[,"powerInteraction"],resultsMatSW05Limma[,"powerInteractionSW"],
 	      resultsMatRegular10Limma[,"powerInteraction"],resultsMatSW10Limma[,"powerInteractionSW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power Interaction effect", main="")
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power Interaction effect", main="limma")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
 legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=.8, lwd=2)
 mean(resultsMatSW01Limma[,"powerInteractionSW"]-resultsMatRegular01Limma[,"powerInteraction"])
-#[1] 0.06504444
 mean(resultsMatSW05Limma[,"powerInteractionSW"]-resultsMatRegular05Limma[,"powerInteraction"])
-#[1] 0.04766667
 mean(resultsMatSW10Limma[,"powerInteractionSW"]-resultsMatRegular10Limma[,"powerInteraction"])
-#[1] 0.04271111
-
-
-## OFDR plot introduction
-#par(bty="l")
-boxplot(resultsMatRegular05Limma[,"overallFDR"],ylab="OFDR", yaxt="n", bty="l")
-axis(2,at=c(0.05,0.055,0.06))
-abline(h=0.05,col="red",lty=2,lwd=2)
-
-
-boxplot(cbind(resultsMatRegular05[,"fdrT1"], resultsMatRegular05[,"fdrT2"], resultsMatRegular05[,"fdrInteraction"]), labels=c("t1","t2","interaction"), ylab="FDR")
-boxplot(cbind(resultsMatSW05[,"fdrT1SW"], resultsMatSW05[,"fdrT2SW"], resultsMatSW05[,"fdrInteractionSW"]), labels=c("t1","t2","interaction"), ylab="FDR")
 
 ## main effects contrasts
 #t1
@@ -385,7 +373,7 @@ boxplot(cbind(resultsMatRegular01[,"fdrAllHyp"],resultsMatSW01[,"fdrAllHypSW"],
 	      resultsMatRegular01[,"nullGeneFDR"],resultsMatSW01[,"nullGeneFDRSW"],
 	      resultsMatRegular05[,"nullGeneFDR"],resultsMatSW05[,"nullGeneFDRSW"],
 	      resultsMatRegular10[,"nullGeneFDR"],resultsMatSW10[,"nullGeneFDRSW"]),
-	boxwex=.2,at=rep(seq(0.3,6.7,by=0.8),each=2)+rep(c(-.1,.1),9), border=rep(c("black","steelblue"),9), col=alpha(rep(c("black","steelblue"),9),.2), xaxt="n", yaxt="n", ylab="False Discovery Rate", main=paste("edgeR","nCst",nCst,"nT1",nT1,"nT2",nT2,"nInt",nInt,"FC 2"))
+	boxwex=.2,at=rep(seq(0.3,6.7,by=0.8),each=2)+rep(c(-.1,.1),9), border=rep(c("black","steelblue"),9), col=alpha(rep(c("black","steelblue"),9),.2), xaxt="n", yaxt="n", ylab="Empirical false riscovery rate", main="edgeR analysis", xlab="False discovery rate cut-off")
 axis(2,at=c(0.01,0.05,0.1))
 axis(1,at=c(seq(0.3,6.7,by=0.8)), labels=rep(c("1%","5%","10%"),3))
 abline(v=c(2.3,4.7),col=alpha("grey",.8))
@@ -398,9 +386,9 @@ lines(x=c(4.1,4.5),y=rep(0.1,each=2),col=2,lty=2)
 lines(x=c(4.9,5.3),y=rep(0.01,each=2),col=2,lty=2)
 lines(x=c(5.7,6.1),y=rep(0.05,each=2),col=2,lty=2)
 lines(x=c(6.5,6.9),y=rep(0.1,each=2),col=2,lty=2)
-text(x=0.25,y=0.1,"All Hypotheses")
-text(x=3,y=0.1,"Gene level")
-text(x=5.6,y=0.1,"Null gene level")
+text(x=0.25,y=0.13,"all hypotheses")
+text(x=3,y=0.13,"OFDR")
+text(x=5.6,y=0.13,"null gene OFDR")
 
 
 boxplot(cbind(resultsMatRegular01Limma[,"fdrAllHyp"],resultsMatSW01Limma[,"fdrAllHypSW"],
@@ -412,7 +400,7 @@ boxplot(cbind(resultsMatRegular01Limma[,"fdrAllHyp"],resultsMatSW01Limma[,"fdrAl
 	      resultsMatRegular01Limma[,"nullGeneFDR"],resultsMatSW01Limma[,"nullGeneFDRSW"],
 	      resultsMatRegular05Limma[,"nullGeneFDR"],resultsMatSW05Limma[,"nullGeneFDRSW"],
 	      resultsMatRegular10Limma[,"nullGeneFDR"],resultsMatSW10Limma[,"nullGeneFDRSW"]),
-	boxwex=.2,at=rep(seq(0.3,6.7,by=0.8),each=2)+rep(c(-.1,.1),9), border=rep(c("black","steelblue"),9), col=alpha(rep(c("black","steelblue"),9),.2), xaxt="n", yaxt="n", ylab="Empirical false discovery rate", main="", xlab="False discovery rate cut-off")
+	boxwex=.2,at=rep(seq(0.3,6.7,by=0.8),each=2)+rep(c(-.1,.1),9), border=rep(c("black","steelblue"),9), col=alpha(rep(c("black","steelblue"),9),.2), xaxt="n", yaxt="n", ylab="Empirical false discovery rate", main="limma analysis", xlab="False discovery rate cut-off")
 axis(2,at=c(0.01,0.05,0.1))
 axis(1,at=c(seq(0.3,6.7,by=0.8)), labels=rep(c("1%","5%","10%"),3))
 abline(v=c(2.3,4.7),col=alpha("grey",.8))
@@ -425,9 +413,9 @@ lines(x=c(4.1,4.5),y=rep(0.1,each=2),col=2,lty=2)
 lines(x=c(4.9,5.3),y=rep(0.01,each=2),col=2,lty=2)
 lines(x=c(5.7,6.1),y=rep(0.05,each=2),col=2,lty=2)
 lines(x=c(6.5,6.9),y=rep(0.1,each=2),col=2,lty=2)
-text(x=0.25,y=0.12,"all hypotheses")
-text(x=3,y=0.12,"OFDR")
-text(x=5.6,y=0.12,"null gene OFDR")
+text(x=0.25,y=0.1,"all hypotheses")
+text(x=3,y=0.1,"OFDR")
+text(x=5.6,y=0.1,"null gene OFDR")
 legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=.8, lwd=2)
 
 boxplot(cbind(resultsMatRegular01[,"powerInteraction"],resultsMatSW01[,"powerInteractionSW"],
@@ -435,6 +423,7 @@ boxplot(cbind(resultsMatRegular01[,"powerInteraction"],resultsMatSW01[,"powerInt
 	      resultsMatRegular10[,"powerInteraction"],resultsMatSW10[,"powerInteractionSW"]),
 	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power Interaction effect", main="edgeR")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
+abline(v=c(0.7,1.5),col=alpha("grey",.8))
 legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=.8, lwd=2)
 
 
@@ -446,22 +435,10 @@ axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
 legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=.8, lwd=2)
 mean(resultsMatSW01Limma[,"powerInteractionSW"]-resultsMatRegular01Limma[,"powerInteraction"])
-#[1] 0.06504444
 mean(resultsMatSW05Limma[,"powerInteractionSW"]-resultsMatRegular05Limma[,"powerInteraction"])
-#[1] 0.04766667
 mean(resultsMatSW10Limma[,"powerInteractionSW"]-resultsMatRegular10Limma[,"powerInteraction"])
-#[1] 0.04271111
 
 
-## OFDR plot introduction
-#par(bty="l")
-boxplot(resultsMatRegular05Limma[,"overallFDR"],ylab="OFDR", yaxt="n", bty="l")
-axis(2,at=c(0.05,0.055,0.06))
-abline(h=0.05,col="red",lty=2,lwd=2)
-
-
-boxplot(cbind(resultsMatRegular05[,"fdrT1"], resultsMatRegular05[,"fdrT2"], resultsMatRegular05[,"fdrInteraction"]), labels=c("t1","t2","interaction"), ylab="FDR")
-boxplot(cbind(resultsMatSW05[,"fdrT1SW"], resultsMatSW05[,"fdrT2SW"], resultsMatSW05[,"fdrInteractionSW"]), labels=c("t1","t2","interaction"), ylab="FDR")
 
 ## main effects contrasts
 #t1
