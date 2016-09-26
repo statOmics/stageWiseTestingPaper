@@ -51,7 +51,7 @@ rownames(results) <- rownames(lrt[[1]])
 names(results)=colnames(L)
 summary.TestResults(results)
 # unique genes
-uniqueGenesRegular=which(rowSums(results==0)==3)
+uniqueGenesRegular=which(results[,1]!=0 | results[,2]!=0 | results[,3]!=0)
 length(uniqueGenesRegular) #nr of unique genes regular analysis
 
 ### Stagewise testing: Shaffer
@@ -70,7 +70,8 @@ pValuesStageIIShaffer[!(rownames(pValuesStageIIShaffer)%in%genesSI),]=1
 contrastsAll=sapply(lrt[1:3],function(x) x$table$logFC )
 resultsStageIIShaffer=(pValuesStageIIShaffer<alphaAdjusted)*sign(contrastsAll)
 summary.TestResults(resultsStageIIShaffer)
-uniqueGenesSW=which(rowSums(resultsStageIIShaffer==0)==3)
+uniqueGenesSW=which(resultsStageIIShaffer[,1]!=0 | resultsStageIIShaffer[,2]!=0 | resultsStageIIShaffer[,3]!=0)
+length(uniqueGenesSW)
 
 genesNotFoundStageII <- genesSI[genesSI %in% rownames(resultsStageIIShaffer)[rowSums(resultsStageIIShaffer==0)==3]]
 length(genesNotFoundStageII) #stage I only genes
