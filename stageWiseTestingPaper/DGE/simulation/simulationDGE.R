@@ -35,32 +35,31 @@ nT2 <- 1000
 nInt <- 1000
 grp <- factor(rep(0:1,each=5))
 
-resultsMatRegular01 <- matrix(NA,nrow=N,ncol=10)
-colnames(resultsMatRegular01) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes")
-resultsMatRegular05 <- matrix(NA,nrow=N,ncol=10)
-colnames(resultsMatRegular05) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes")
-resultsMatRegular10 <- matrix(NA,nrow=N,ncol=10)
-colnames(resultsMatRegular10) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes")
-resultsMatRegular01Limma <- matrix(NA,nrow=N,ncol=10)
-colnames(resultsMatRegular01Limma) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes")
-resultsMatRegular05Limma <- matrix(NA,nrow=N,ncol=10)
-colnames(resultsMatRegular05Limma) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes")
-resultsMatRegular10Limma <- matrix(NA,nrow=N,ncol=10)
-colnames(resultsMatRegular10Limma) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes")
+resultsMatRegular01 <- matrix(NA,nrow=N,ncol=11)
+colnames(resultsMatRegular01) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes", "totalGenesFound")
+resultsMatRegular05 <- matrix(NA,nrow=N,ncol=11)
+colnames(resultsMatRegular05) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes", "totalGenesFound")
+resultsMatRegular10 <- matrix(NA,nrow=N,ncol=11)
+colnames(resultsMatRegular10) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes", "totalGenesFound")
+resultsMatRegular01Limma <- matrix(NA,nrow=N,ncol=11)
+colnames(resultsMatRegular01Limma) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes", "totalGenesFound")
+resultsMatRegular05Limma <- matrix(NA,nrow=N,ncol=11)
+colnames(resultsMatRegular05Limma) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes", "totalGenesFound")
+resultsMatRegular10Limma <- matrix(NA,nrow=N,ncol=11)
+colnames(resultsMatRegular10Limma) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes", "totalGenesFound")
 
-resultsMatSW01 <- matrix(NA,nrow=N,ncol=11)
-colnames(resultsMatSW01) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW")
-resultsMatSW05 <- matrix(NA,nrow=N,ncol=11)
-colnames(resultsMatSW05) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW")
-resultsMatSW10 <- matrix(NA,nrow=N,ncol=11)
-colnames(resultsMatSW10) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW")
-resultsMatSW01Limma <- matrix(NA,nrow=N,ncol=11)
-colnames(resultsMatSW01Limma) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW")
-resultsMatSW05Limma <- matrix(NA,nrow=N,ncol=11)
-colnames(resultsMatSW05Limma) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW")
-resultsMatSW10Limma <- matrix(NA,nrow=N,ncol=11)
-colnames(resultsMatSW10Limma) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW")
-
+resultsMatSW01 <- matrix(NA,nrow=N,ncol=12)
+colnames(resultsMatSW01) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW", "totalGenesFoundSW")
+resultsMatSW05 <- matrix(NA,nrow=N,ncol=12)
+colnames(resultsMatSW05) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW", "totalGenesFoundSW")
+resultsMatSW10 <- matrix(NA,nrow=N,ncol=12)
+colnames(resultsMatSW10) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW", "totalGenesFoundSW")
+resultsMatSW01Limma <- matrix(NA,nrow=N,ncol=12)
+colnames(resultsMatSW01Limma) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW", "totalGenesFoundSW")
+resultsMatSW05Limma <- matrix(NA,nrow=N,ncol=12)
+colnames(resultsMatSW05Limma) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW", "totalGenesFoundSW")
+resultsMatSW10Limma <- matrix(NA,nrow=N,ncol=12)
+colnames(resultsMatSW10Limma) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW", "totalGenesFoundSW")
 
 
 for(iter in 1:N){
@@ -155,7 +154,7 @@ boxplot(cbind(resultsMatRegular01[,"fdrAllHyp"],resultsMatSW01[,"fdrAllHypSW"],
 	      resultsMatRegular01[,"nullGeneFDR"],resultsMatSW01[,"nullGeneFDRSW"],
 	      resultsMatRegular05[,"nullGeneFDR"],resultsMatSW05[,"nullGeneFDRSW"],
 	      resultsMatRegular10[,"nullGeneFDR"],resultsMatSW10[,"nullGeneFDRSW"]),
-	boxwex=.2,at=rep(seq(0.3,6.7,by=0.8),each=2)+rep(c(-.1,.1),9), border=rep(c("black","steelblue"),9), col=alpha(rep(c("black","steelblue"),9),.2), xaxt="n", yaxt="n", ylab="Empirical false discovery rate", main="edgeR analysis", xlab="False discovery rate cut-off")
+	boxwex=.2,at=rep(seq(0.3,6.7,by=0.8),each=2)+rep(c(-.1,.1),9), border=rep(c("black","steelblue"),9), col=alpha(rep(c("black","steelblue"),9),.2), xaxt="n", yaxt="n", ylab="Empirical false discovery proportion", main="edgeR analysis", xlab="False discovery rate cut-off")
 axis(2,at=c(0.01,0.05,0.1))
 axis(1,at=c(seq(0.3,6.7,by=0.8)), labels=rep(c("1%","5%","10%"),3))
 abline(v=c(2.3,4.7),col=alpha("grey",.8))
@@ -183,7 +182,7 @@ boxplot(cbind(resultsMatRegular01Limma[,"fdrAllHyp"],resultsMatSW01Limma[,"fdrAl
 	      resultsMatRegular01Limma[,"nullGeneFDR"],resultsMatSW01Limma[,"nullGeneFDRSW"],
 	      resultsMatRegular05Limma[,"nullGeneFDR"],resultsMatSW05Limma[,"nullGeneFDRSW"],
 	      resultsMatRegular10Limma[,"nullGeneFDR"],resultsMatSW10Limma[,"nullGeneFDRSW"]),
-	boxwex=.2,at=rep(seq(0.3,6.7,by=0.8),each=2)+rep(c(-.1,.1),9), border=rep(c("black","steelblue"),9), col=alpha(rep(c("black","steelblue"),9),.2), xaxt="n", yaxt="n", ylab="Empirical false discovery rate", main="limma analysis", xlab="False discovery rate cut-off")
+	boxwex=.2,at=rep(seq(0.3,6.7,by=0.8),each=2)+rep(c(-.1,.1),9), border=rep(c("black","steelblue"),9), col=alpha(rep(c("black","steelblue"),9),.2), xaxt="n", yaxt="n", ylab="Empirical false discovery proportion", main="limma analysis", xlab="False discovery rate cut-off")
 axis(2,at=c(0.01,0.05,0.1))
 axis(1,at=c(seq(0.3,6.7,by=0.8)), labels=rep(c("1%","5%","10%"),3))
 abline(v=c(2.3,4.7),col=alpha("grey",.8))
@@ -257,7 +256,69 @@ axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
 legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=.8, lwd=2)
 
+#number of genes found
+boxplot(cbind(resultsMatRegular01[,"totalGenesFound"],resultsMatSW01[,"totalGenesFoundSW"],
+	      resultsMatRegular05[,"totalGenesFound"],resultsMatSW05[,"totalGenesFoundSW"],
+	      resultsMatRegular10[,"totalGenesFound"],resultsMatSW10[,"totalGenesFoundSW"]),
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Number of genes found", main="edgeR")
+axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
+abline(v=c(0.7,1.5),col=alpha("grey",.8))
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=0.8, lwd=2)
+
+
+boxplot(cbind(resultsMatRegular01Limma[,"totalGenesFound"],resultsMatSW01Limma[,"totalGenesFoundSW"],
+	      resultsMatRegular05Limma[,"totalGenesFound"],resultsMatSW05Limma[,"totalGenesFoundSW"],
+	      resultsMatRegular10Limma[,"totalGenesFound"],resultsMatSW10Limma[,"totalGenesFoundSW"]),
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Number of genes found", main="limma")
+axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
+abline(v=c(0.7,1.5),col=alpha("grey",.8))
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=0.8, lwd=2)
+
 dev.off()
+
+
+## paper plot
+#pdf("~/Dropbox/phdKoen/stagewisetesting/figures/resultsDGEPaper.pdf")
+layout(matrix(c(1,1,2),nrow=1,ncol=3))
+par(bty="l", cex.axis=1.5, cex.lab=2, mar=c(5,4.4,4,2)+0.1)
+boxplot(cbind(resultsMatRegular01Limma[,"fdrAllHyp"],resultsMatSW01Limma[,"fdrAllHypSW"],
+	      resultsMatRegular05Limma[,"fdrAllHyp"],resultsMatSW05Limma[,"fdrAllHypSW"],
+	      resultsMatRegular10Limma[,"fdrAllHyp"],resultsMatSW10Limma[,"fdrAllHypSW"],
+	      resultsMatRegular01Limma[,"overallFDR"],resultsMatSW01Limma[,"overallFDRSW"],
+	      resultsMatRegular05Limma[,"overallFDR"],resultsMatSW05Limma[,"overallFDRSW"],
+	      resultsMatRegular10Limma[,"overallFDR"],resultsMatSW10Limma[,"overallFDRSW"],
+	      resultsMatRegular01Limma[,"nullGeneFDR"],resultsMatSW01Limma[,"nullGeneFDRSW"],
+	      resultsMatRegular05Limma[,"nullGeneFDR"],resultsMatSW05Limma[,"nullGeneFDRSW"],
+	      resultsMatRegular10Limma[,"nullGeneFDR"],resultsMatSW10Limma[,"nullGeneFDRSW"]),
+	boxwex=.2,at=rep(seq(0.3,6.7,by=0.8),each=2)+rep(c(-.1,.1),9), border=rep(c("black","steelblue"),9), col=alpha(rep(c("black","steelblue"),9),.2), xaxt="n", yaxt="n", ylab="Empirical false discovery proportion", main="", xlab="False discovery rate cut-off")
+axis(2,at=c(0.01,0.05,0.1))
+axis(1,at=c(seq(0.3,6.7,by=0.8)), labels=rep(c("1%","5%","10%"),3))
+abline(v=c(2.3,4.7),col=alpha("grey",.8))
+lines(x=c(0.1,0.5),y=rep(0.01,each=2),col=2,lty=2, lwd=2)
+lines(x=c(0.9,1.3),y=rep(0.05,each=2),col=2,lty=2, lwd=2)
+lines(x=c(1.7,2.1),y=rep(0.1,each=2),col=2,lty=2, lwd=2)
+lines(x=c(2.5,2.9),y=rep(0.01,each=2),col=2,lty=2, lwd=2)
+lines(x=c(3.3,3.7),y=rep(0.05,each=2),col=2,lty=2, lwd=2)
+lines(x=c(4.1,4.5),y=rep(0.1,each=2),col=2,lty=2, lwd=2)
+lines(x=c(4.9,5.3),y=rep(0.01,each=2),col=2,lty=2, lwd=2)
+lines(x=c(5.7,6.1),y=rep(0.05,each=2),col=2,lty=2, lwd=2)
+lines(x=c(6.5,6.9),y=rep(0.1,each=2),col=2,lty=2, lwd=2)
+text(x=0.25,y=0.12,"all hypotheses", cex=2)
+text(x=2.8,y=0.12,"OFDR", cex=2)
+text(x=5.4,y=0.12,"null genes", cex=2)
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2.5, lwd=2)
+
+boxplot(cbind(resultsMatRegular01Limma[,"powerInteraction"],resultsMatSW01Limma[,"powerInteractionSW"],
+	      resultsMatRegular05Limma[,"powerInteraction"],resultsMatSW05Limma[,"powerInteractionSW"],
+	      resultsMatRegular10Limma[,"powerInteraction"],resultsMatSW10Limma[,"powerInteractionSW"]),
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power interaction effect", main="", bty="l")
+axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
+abline(v=c(0.7,1.5),col=alpha("grey",.8))
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=1.9, lwd=2)
+#dev.off()
+
+
+
 
 ### same but with three replicates.
 N=30
@@ -268,33 +329,31 @@ nT2 <- 1000
 nInt <- 1000
 grp <- factor(rep(0:1,each=3))
 
-resultsMatRegular01 <- matrix(NA,nrow=N,ncol=10)
-colnames(resultsMatRegular01) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes")
-resultsMatRegular05 <- matrix(NA,nrow=N,ncol=10)
-colnames(resultsMatRegular05) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes")
-resultsMatRegular10 <- matrix(NA,nrow=N,ncol=10)
-colnames(resultsMatRegular10) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes")
-resultsMatRegular01Limma <- matrix(NA,nrow=N,ncol=10)
-colnames(resultsMatRegular01Limma) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes")
-resultsMatRegular05Limma <- matrix(NA,nrow=N,ncol=10)
-colnames(resultsMatRegular05Limma) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes")
-resultsMatRegular10Limma <- matrix(NA,nrow=N,ncol=10)
-colnames(resultsMatRegular10Limma) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes")
+resultsMatRegular01 <- matrix(NA,nrow=N,ncol=11)
+colnames(resultsMatRegular01) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes", "totalGenesFound")
+resultsMatRegular05 <- matrix(NA,nrow=N,ncol=11)
+colnames(resultsMatRegular05) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes", "totalGenesFound")
+resultsMatRegular10 <- matrix(NA,nrow=N,ncol=11)
+colnames(resultsMatRegular10) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes", "totalGenesFound")
+resultsMatRegular01Limma <- matrix(NA,nrow=N,ncol=11)
+colnames(resultsMatRegular01Limma) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes", "totalGenesFound")
+resultsMatRegular05Limma <- matrix(NA,nrow=N,ncol=11)
+colnames(resultsMatRegular05Limma) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes", "totalGenesFound")
+resultsMatRegular10Limma <- matrix(NA,nrow=N,ncol=11)
+colnames(resultsMatRegular10Limma) <- c("overallFDR", "powerInteraction", "fdrInteraction", "fdrT1", "fdrT2", "fdrAllHyp", "powerT1", "powerT2", "nullGeneFDR", "nrFalsePositiveNullGenes", "totalGenesFound")
 
-resultsMatSW01 <- matrix(NA,nrow=N,ncol=11)
-colnames(resultsMatSW01) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW")
-resultsMatSW05 <- matrix(NA,nrow=N,ncol=11)
-colnames(resultsMatSW05) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW")
-resultsMatSW10 <- matrix(NA,nrow=N,ncol=11)
-colnames(resultsMatSW10) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW")
-resultsMatSW01Limma <- matrix(NA,nrow=N,ncol=11)
-colnames(resultsMatSW01Limma) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW")
-resultsMatSW05Limma <- matrix(NA,nrow=N,ncol=11)
-colnames(resultsMatSW05Limma) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW")
-resultsMatSW10Limma <- matrix(NA,nrow=N,ncol=11)
-colnames(resultsMatSW10Limma) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW")
-
-
+resultsMatSW01 <- matrix(NA,nrow=N,ncol=12)
+colnames(resultsMatSW01) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW", "totalGenesFoundSW")
+resultsMatSW05 <- matrix(NA,nrow=N,ncol=12)
+colnames(resultsMatSW05) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW", "totalGenesFoundSW")
+resultsMatSW10 <- matrix(NA,nrow=N,ncol=12)
+colnames(resultsMatSW10) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW", "totalGenesFoundSW")
+resultsMatSW01Limma <- matrix(NA,nrow=N,ncol=12)
+colnames(resultsMatSW01Limma) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW", "totalGenesFoundSW")
+resultsMatSW05Limma <- matrix(NA,nrow=N,ncol=12)
+colnames(resultsMatSW05Limma) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW", "totalGenesFoundSW")
+resultsMatSW10Limma <- matrix(NA,nrow=N,ncol=12)
+colnames(resultsMatSW10Limma) <- c("fdrScreenSW", "overallFDRSW", "powerInteractionSW", "fdrInteractionSW", "fdrT1SW", "fdrT2SW", "fdrAllHypSW","powerT1SW", "powerT2SW", "nullGeneFDRSW", "nrFalsePositiveNullGenesSW", "totalGenesFoundSW")
 
 for(iter in 1:N){
 	set.seed(iter)
@@ -490,6 +549,23 @@ axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
 legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=.8, lwd=2)
 
+#number of genes found
+boxplot(cbind(resultsMatRegular01[,"totalGenesFound"],resultsMatSW01[,"totalGenesFoundSW"],
+	      resultsMatRegular05[,"totalGenesFound"],resultsMatSW05[,"totalGenesFoundSW"],
+	      resultsMatRegular10[,"totalGenesFound"],resultsMatSW10[,"totalGenesFoundSW"]),
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Number of genes found", main="edgeR")
+axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
+abline(v=c(0.7,1.5),col=alpha("grey",.8))
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=.8, lwd=2)
+
+
+boxplot(cbind(resultsMatRegular01Limma[,"totalGenesFound"],resultsMatSW01Limma[,"totalGenesFoundSW"],
+	      resultsMatRegular05Limma[,"totalGenesFound"],resultsMatSW05Limma[,"totalGenesFoundSW"],
+	      resultsMatRegular10Limma[,"totalGenesFound"],resultsMatSW10Limma[,"totalGenesFoundSW"]),
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Number of genes found", main="limma")
+axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
+abline(v=c(0.7,1.5),col=alpha("grey",.8))
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=.8, lwd=2)
 
 dev.off()
 

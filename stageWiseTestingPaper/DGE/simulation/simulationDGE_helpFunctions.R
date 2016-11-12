@@ -21,7 +21,7 @@ doRegularAnalysis <- function(data,L,alpha,design, fit){
 	powerT2 <- mean(indT2All%in%foundT2)
 
 
-	return(c(overallFDR=overallFDR, powerInteraction=powerInteraction, fdrInteraction=fdrInt, fdrT1=fdrT1, fdrT2=fdrT2, fdrAllHyp=fdrAllHyp, powerT1=powerT1, powerT2=powerT2,   nullGeneFDR=nullGeneFDR , nrFalsePositiveNullGenes=length(nullGenesFound)))
+	return(c(overallFDR=overallFDR, powerInteraction=powerInteraction, fdrInteraction=fdrInt, fdrT1=fdrT1, fdrT2=fdrT2, fdrAllHyp=fdrAllHyp, powerT1=powerT1, powerT2=powerT2,   nullGeneFDR=nullGeneFDR , nrFalsePositiveNullGenes=length(nullGenesFound), totalGenesFound=length(allGenesFound)))
 
 }
 
@@ -47,7 +47,7 @@ doRegularAnalysisLimma <- function(data,alpha,design, fit){
 	powerT1 <- mean(indT1All%in%foundT1)
 	powerT2 <- mean(indT2All%in%foundT2)
 
-	return(c(overallFDR=overallFDR, powerInteraction=powerInteraction, fdrInteraction=fdrInt, fdrT1=fdrT1, fdrT2=fdrT2, fdrAllHyp=fdrAllHyp, powerT1=powerT1, powerT2=powerT2,   nullGeneFDR=nullGeneFDR , nrFalsePositiveNullGenes=length(nullGenesFound)))
+	return(c(overallFDR=overallFDR, powerInteraction=powerInteraction, fdrInteraction=fdrInt, fdrT1=fdrT1, fdrT2=fdrT2, fdrAllHyp=fdrAllHyp, powerT1=powerT1, powerT2=powerT2,   nullGeneFDR=nullGeneFDR , nrFalsePositiveNullGenes=length(nullGenesFound), totalGenesFound=length(allGenesFound)))
 }
 
 
@@ -80,7 +80,7 @@ doStageWiseAnalysis <- function(data,L,alpha,design, fit){
 	powerT1SW <- mean(indT1All%in%foundT1SW)
 	powerT2SW <- mean(indT2All%in%foundT2SW)
 
-return(c(fdrScreenSW=fdrScreenSW, overallFDRSW=overallFDRSW, powerInteractionSW=powerInteractionSW, fdrInteractionSW=fdrIntSW, fdrT1SW=fdrT1SW, fdrT2SW=fdrT2SW, fdrAllHypSW=fdrAllHypSW,  powerT1SW=powerT1SW, powerT2SW=powerT2SW, nullGeneFDRSW=nullGeneFDRSW, nrFalsePositiveNullGenesSW=length(nullGenesFoundSW)))
+return(c(fdrScreenSW=fdrScreenSW, overallFDRSW=overallFDRSW, powerInteractionSW=powerInteractionSW, fdrInteractionSW=fdrIntSW, fdrT1SW=fdrT1SW, fdrT2SW=fdrT2SW, fdrAllHypSW=fdrAllHypSW,  powerT1SW=powerT1SW, powerT2SW=powerT2SW, nullGeneFDRSW=nullGeneFDRSW, nrFalsePositiveNullGenesSW=length(nullGenesFoundSW), totalGenesFoundSW=length(allGenesFoundSW)))
 }
 
 
@@ -111,7 +111,7 @@ doStageWiseAnalysisLimma <- function(data,alpha,design, fit){
 	powerT1SW <- mean(indT1All%in%foundT1SW)
 	powerT2SW <- mean(indT2All%in%foundT2SW)
 
-return(c(fdrScreenSW=fdrScreenSW, overallFDRSW=overallFDRSW, powerInteractionSW=powerInteractionSW, fdrInteractionSW=fdrIntSW, fdrT1SW=fdrT1SW, fdrT2SW=fdrT2SW, fdrAllHypSW=fdrAllHypSW,  powerT1SW=powerT1SW, powerT2SW=powerT2SW, nullGeneFDRSW=nullGeneFDRSW, nrFalsePositiveNullGenesSW=length(nullGenesFoundSW)))
+return(c(fdrScreenSW=fdrScreenSW, overallFDRSW=overallFDRSW, powerInteractionSW=powerInteractionSW, fdrInteractionSW=fdrIntSW, fdrT1SW=fdrT1SW, fdrT2SW=fdrT2SW, fdrAllHypSW=fdrAllHypSW,  powerT1SW=powerT1SW, powerT2SW=powerT2SW, nullGeneFDRSW=nullGeneFDRSW, nrFalsePositiveNullGenesSW=length(nullGenesFoundSW), totalGenesFoundSW=length(allGenesFoundSW)))
 }
 
 

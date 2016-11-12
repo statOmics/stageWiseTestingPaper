@@ -29,3 +29,8 @@ The DTU case study considers the dataset provided by
 Shancheng Ren\*, Zhiyu Peng\*, Jian-Hua Mao\*, Yongwei Yu, Changjun Yin, Xin Gao, Zilian Cui, Jibin Zhang, Kang Yi, Weidong Xu, Chao Chen, Fubo Wang, Xinwu Guo, Ji Lu, Jun Yang, Min Wei, Zhijian Tian, Yinghui Guan, Liang Tang, Chuanliang Xu, Linhui Wang, Xu Gao, Wei Tian, Jian Wang, Huanming Yang, Jun Wang and Yinghao Sun. RNA-seq analysis of prostate cancer in the Chinese population identifies recurrent gene fusions, cancer-associated long noncoding RNAs and aberrant alternative splicings. [Cell Research (2012) 22:806–821.](http://www.nature.com/cr/journal/v22/n5/full/cr201230a.html)
 
 We downloaded the raw, unnormalized kallisto processed data from the [Bear's lair](http://biorxiv.org/content/early/2016/05/31/056200) project website (http://pachterlab.github.io/lair/).
+
+Please contact koen.vandenberge@ugent.be or raise an issue on GitHub for questions.
+
+git commit x
+git push stageWiseRep master
