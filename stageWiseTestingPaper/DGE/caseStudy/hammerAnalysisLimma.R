@@ -5,20 +5,17 @@ eset@phenoData@data$Time #typo. Will do it ourself
 time = factor(rep(c("mo2","w2"),each=4),levels=c("w2","mo2"))
 eset@phenoData@data$protocol
 treat = factor(c("control","control","SNL","SNL","control","control","SNL","SNL"),levels=c("control","SNL"))
-techRep = eset@phenoData@data$num.tech.reps #this tells you how many technical replicates were pooled to obtain the counts
 design = model.matrix(~time*treat)
 rownames(design) = paste0(time,treat,"_",techRep)
 colnames(design)[4] = "timeMo2xTreatSNL"
 
 library(edgeR) ; library(Biobase) ; library(limma)
 cpmOffset=2
-#keep = rowSums(cpm(exprs(eset))>cpmOffset)>=4 #2cpm in 4 samples
 keep = rowSums(cpm(exprs(eset))>cpmOffset)>=2 #2cpm in 2 samples
 d = DGEList(exprs(eset)[keep,])
 colnames(d) = rownames(design)
 d = calcNormFactors(d)
-boxplot(colSums(exprs(eset))~time) 
-boxplot(colSums(exprs(eset))~treat) 
+
 
 ## QC
 library(RColorBrewer)
@@ -27,8 +24,7 @@ plotMDS(d,col=as.numeric(treat),labels=colnames(d))
 plot(density(cpm(d$counts[,1],log=TRUE)),type='n')
 for(i in 1:ncol(d$counts)) lines(density(cpm(d$counts[,i],log=TRUE)),col=i)
 plot(density(cpm(d$counts[,1],log=TRUE)),type='n')
-for(i in 1:ncol(d$counts)) lines(density(cpm(d$counts[,i],log=TRUE)),col=as.numeric(treat)[i]) #timepoint 2 has higher expression for quite some genes.
-
+for(i in 1:ncol(d$counts)) lines(density(cpm(d$counts[,i],log=TRUE)),col=as.numeric(treat)[i])
 
 ## DE analysis
 L=matrix(0,ncol=3,nrow=ncol(design))
