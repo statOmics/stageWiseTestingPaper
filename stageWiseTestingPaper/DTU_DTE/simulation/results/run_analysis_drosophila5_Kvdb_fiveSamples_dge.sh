@@ -26,16 +26,12 @@ grep "protein_coding" $REFERENCEDIR/Drosophila_melanogaster.BDGP5.70.gtf \
 > $REFERENCEDIR/Drosophila_melanogaster.BDGP5.70.protein_coding.gtf
 
 ## Prepare the reference files for RSEM
-#mkdir $REFERENCEDIR/rsem_reference #### Added by Koen (only do this once)
-#make sure to add bowtie2 to your PATH for commands below. Koen
 $RSEM/rsem-prepare-reference \
 --gtf $REFERENCEDIR/Drosophila_melanogaster.BDGP5.70.protein_coding.gtf --bowtie2 \
 $REFERENCEDIR/Drosophila_melanogaster.BDGP5.70.dna.toplevel.fa \
 $REFERENCEDIR/rsem_reference/Drosophila_melanogaster.BDGP5.70
 
 ## Estimate the model file with RSEM
-#mkdir $REFERENCEDIR/rsem_model ## added by Koen (only do this once)
-#make sure samtools is in your path for command below
 $RSEM/rsem-calculate-expression \
 --paired-end --bowtie2 --seed 123 \
 $REFERENCEDIR/SRR1501444_1.fastq $REFERENCEDIR/SRR1501444_2.fastq \
@@ -49,7 +45,8 @@ $RSEM/rsem-plot-model $REFERENCEDIR/rsem_model/SRR1501444 $FIGDIR/RSEM_model.pdf
 ## Modify the quality score distribution in the RSEM model file so that the probability
 ## of quality score 2 is 0. Otherwise, the quality scores of the simulated data may be very low.
 ## Also make sure that the transition probabilities into this state are 0.
-## ->> $REFERENCEDIR/rsem_model/SRR1501444.stat/SRR1501444.highQ.model
+## ->> $REFERENCEDIR/rsem_model/SRR1501444.stat/SRR1501444.highQ_soneson.model
+## this can alternatively be done with the adaptModelFileRSEM_Drosophila.R script.
 
 ## Estimate and plot the isoform percentage distributions from the RSEM results
 R CMD BATCH --no-restore --no-save "--args referencefile='$REFERENCEDIR/rsem_model/SRR1501444.isoforms.results' outdir='$FIGDIR'" $RCODEGEN/isopct_distribution.R $ROUT/isopct_distribution_drosophila.Rout
@@ -107,9 +104,7 @@ R CMD BATCH --no-restore --no-save "--args input_gtf='$REFERENCEDIR/Drosophila_m
 
 
 ## -------------------------- DATA SIMULATION ------------------------------ ##
-
 ## Estimate the simulation parameters for the individual samples
-## kvdb: changed R scripts internally and specified them here.
 ## note that you need internet connection for this command as it calls biomaRt.
 
 ## switching order for some number of most expresed transcripts within a gene
@@ -121,8 +116,7 @@ R CMD BATCH --no-restore --no-save "--args path_to_sim_details='$NONNULLSIMULATI
 #truth file## Generate truth files
 R CMD BATCH --no-restore --no-save "--args path_to_generate_truth_file='$RCODEGEN/generate_truth_table_function.R' path_to_final_summary='$NONNULLSIMULATION_NODE_FLIP/3_truth/simulation_details.txt' out.file='$NONNULLSIMULATION_NODE_FLIP/3_truth/truth_drosophila_non_null.txt' astalavista.file='$REFERENCEDIR/Drosophila_melanogaster.BDGP5.70.protein_coding_sorted.gtf_astalavista.gtf' gtf.file='$REFERENCEDIR/Drosophila_melanogaster.BDGP5.70.protein_coding.gtf' flattened.gtf.file='$REFERENCEDIR/Drosophila_melanogaster.BDGP5.70.protein_coding.flattened.nomerge.gff' missing.annot.file=NULL" $RCODEGEN/generate_truth_table_run.R $ROUT/generate_truth_table_drosophila_nonnull_node.Rout
 
-## Simulate reads for 6 samples (25 million pairs/sample),
-## kvdb: To change the model file use the adaptModelFileRSEM_Drosophila.R script that I wrote.
+## Simulate reads for 10 samples (25 million pairs/sample),
 
 for n in 1 2 3 4 5 6 7 8 9 10
 do

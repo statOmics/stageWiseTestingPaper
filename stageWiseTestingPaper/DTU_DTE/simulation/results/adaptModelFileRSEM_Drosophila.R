@@ -17,6 +17,3 @@ highQModel[129:132] <- c("0 0 0 0 0")
 highQModel[720] <- c("0 0 0 0 0") 
 writeLines(highQModel,con="SRR1501444.highQ_adapted.model")
 
-# File should be identical to Charlotte's file.
-
-

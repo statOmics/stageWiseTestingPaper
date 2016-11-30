@@ -203,11 +203,8 @@ generate_rsem_files <- function(seed, isoform_results_file, nbr_per_group,
   
   ## Introduce differential splicing (change the s*_IsoPct for the samples in group 2)
   ## and generate new final_summary
-  ## Extract 1,000 genes with at least 2 isoforms and at least 500 expected counts per million
+  ## Extract 1,000 genes with at least 2 isoforms and at least 5 expected counts per million
   ## in the RSEM data, and at least two isoforms with > 10% relative abundance
-
-
-############## CHANGED EXPECTED COUNT.
 
   message("Introducing differential splicing...")
   ds_genes <- 
@@ -220,10 +217,6 @@ generate_rsem_files <- function(seed, isoform_results_file, nbr_per_group,
   #################################
   #change 2 isoforms to multiple
   #################################  
-
-  #################################
-  #### flipping most expressed transcripts
-  #################################
   
   isoform_summary_ds2 <- isoform_summary_ds 
   uniqueGenes=unique(isoform_summary_ds$gene_id)

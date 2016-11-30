@@ -16,15 +16,8 @@ ROUT=/Users/koenvandenberge/PhD_Data/dtu/diff_splice_paper_Kvdb/software/Rout #O
 DEXSEQ=/Users/koenvandenberge/Library/R/3.2/library/DEXSeq/python_scripts #OK
 TOPHAT=/Applications/tophat-2.1.1.OSX_x86_64/ #OK
 CUFFLINKS=/Applications/cufflinks-2.2.1.OSX_x86_64 #OK
-MISOENV=$BASEDIR/software/miso/misoenv2
-MISOINDEXDIR=$REFERENCEDIR/miso_index/
-MISOINDEXDIR_MISSING20=$REFERENCEDIR/INCOMPLETE_MISSING20/miso_index/
-KALLISTO=$BASEDIR/software/kallisto_linux-v0.42.1
-bedGraphToBigWig=$BASEDIR/software/bedGraphToBigWig
-rMATS=$BASEDIR/software/rMATS.3.0.9
 
 ## ------------------------- INPUT PREPARATION ----------------------------- ##
-
 ## The basis for the simulation is generated from a sample downloaded from the SRA.
 ## This sample was sequenced with an Illumina HiSeq, with a paired-end protocol,
 ## and with a read length of 101 bp.
@@ -94,63 +87,20 @@ $REFERENCEDIR/TopHatTranscriptomeIndex/Homo_sapiens.GRCh37.71.dna.primary_assemb
 ## Create conversion table from transcript index to transcript name (to interpret kallisto output)
 grep "^>" $REFERENCEDIR/TopHatTranscriptomeIndex/Homo_sapiens.GRCh37.71.dna.primary_assembly.fa | sed -e 's/>//' | cut -d" " -f1,2 > $REFERENCEDIR/KallistoIndex/TranscriptID_conversion.txt
 
-## Prepare flattened annotations (for DEXSeq)
-#python $DEXSEQ/dexseq_prepare_annotation.py \
-#$REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding.gtf \
-#$REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding.flattened.gff
-
-#python $DEXSEQ/dexseq_prepare_annotation.py --aggregate='no' \
-$REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding.gtf \
-$REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding.flattened.nomerge.gff
-
-## Manually create flattened gtf/gff file (for use with featureCounts and DEXSeq)
-#R CMD BATCH --no-restore --no-save "--args input_gtf='$REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding.gtf' output_gtf='$REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding.flatman.ign.gtf' ignore_strand=TRUE" $RCODEGEN/generate_flattened_gtf.R $ROUT/generate_flattened_gtf.Rout
-#sed -i -e 's/[*]/./' $REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding.flatman.ign.gff
-
-## Manually create flattened gtf/gff file (for use with featureCounts and DEXSeq) - strand specific overlaps
-#R CMD BATCH --no-restore --no-save "--args input_gtf='$REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding.gtf' output_gtf='$REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding.flatman.strandspec.gtf' ignore_strand=FALSE" $RCODEGEN/generate_flattened_gtf.R $ROUT/generate_flattened_gtf_strandspec.Rout
-#sed -i -e 's/[*]/./' $REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding.flatman.strandspec.gff
-
-## Fix original gtf file to count on (real) exon level with featureCounts
-#R CMD BATCH --no-restore --no-save "--args input_gtf='$REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding.gtf' output_gtf='$REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding.exongene.gtf'" $RCODEGEN/generate_renamed_gtf_for_featurecounts.R $ROUT/generate_renamed_gtf_for_featurecounts.Rout
-
-## Prepare gtf file with 'chr' as chromosome prefix (for Casper)
-#sed -e 's/^/chr/' $REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding.gtf \
-#> $REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding_chr.gtf
-
 ## -------------------------- DATA SIMULATION ------------------------------ ##
-
 ## Estimate the simulation parameters for the individual samples
-# without DE
-#R CMD BATCH --no-restore --no-save "--args path_to_generate_rsem_files='$RCODEGEN/kvdb/generate_rsem_files_function_kvdb_flipMostExpressedTranscripts_v2_sevenSamples_alsoLowExpressedGenes_human.R' seed=123 isoform_results_file='$REFERENCEDIR/rsem_model/SRR493366.isoforms.results' nbr_per_group=5 meandisp.file='$REFERENCEDIR/Pickrell.Cheung.Mu.Phi.Estimates.rds' outdirbase='/Volumes/HDKoen/data/dtu/diff_splice_paper_Kvdb/hsapiens/no_diffexpression' librarysize=40000000 keepchr=NULL nbr_diff_spliced=1000 nbr_diff_expr=0 fold_changes=NULL" $RCODEGEN/kvdb/generate_rsem_files_human_run_kvdb.R $ROUT/generate_rsem_files_human_run_node_kvdb.Rout
-# with DE
+
 R CMD BATCH --no-restore --no-save "--args path_to_generate_rsem_files='$RCODEGEN/kvdb/generate_rsem_files_function_kvdb_flipMostExpressedTranscripts_v2_fiveSamples_alsoLowExpressedGenes_human.R' seed=123 isoform_results_file='$REFERENCEDIR/rsem_model/SRR493366.isoforms.results' nbr_per_group=5 meandisp.file='$REFERENCEDIR/Pickrell.Cheung.Mu.Phi.Estimates.rds' outdirbase='/Volumes/HDKoen2/data/dtu/diff_splice_paper_Kvdb/hsapiens/diffexpression/non_null_simulation_dge' librarysize=40000000 keepchr=NULL nbr_diff_spliced=1000 nbr_diff_expr=1000 fold_changes='expon'" $RCODEGEN/kvdb/generate_rsem_files_human_run_kvdb.R $ROUT/generate_rsem_files_human_run_de.Rout
 
-#R CMD BATCH --no-restore --no-save "--args path_to_sim_details='$NONNULLSIMULATION_NODE/3_truth/simulation_details.txt' output_pdf='$FIGDIR/simulation_details_nodiffexp_nonnull.pdf'" $RCODEGEN/plot_simulation_details_2.R $ROUT/plot_simulation_details_2_node_nonnull.Rout
-#R CMD BATCH --no-restore --no-save "--args path_to_sim_details='$NONNULLSIMULATION_DE/3_truth/simulation_details.txt' output_pdf='$FIGDIR/simulation_details_withdiffexp_nonnull.pdf'" $RCODEGEN/plot_simulation_details.R $ROUT/plot_simulation_details_withde_nonnull.Rout
+R CMD BATCH --no-restore --no-save "--args path_to_sim_details='$NONNULLSIMULATION_DE/3_truth/simulation_details.txt' output_pdf='$FIGDIR/simulation_details_withdiffexp_nonnull.pdf'" $RCODEGEN/plot_simulation_details.R $ROUT/plot_simulation_details_withde_nonnull.Rout
 
 ## Generate truth files
-#R CMD BATCH --no-restore --no-save "--args path_to_generate_truth_file='$RCODEGEN/generate_truth_table_function.R' path_to_final_summary='$NULLSIMULATION_DE/3_truth/simulation_details.txt' out.file='$NULLSIMULATION_DE/3_truth/truth_human_null.txt' astalavista.file=NULL gtf.file=NULL flattened.gtf.file='$REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding.flattened.nomerge.gff' missing.annot.file=NULL" $RCODEGEN/generate_truth_table_run.R $ROUT/generate_truth_table_human_null_de.Rout
-#R CMD BATCH --no-restore --no-save "--args path_to_generate_truth_file='$RCODEGEN/generate_truth_table_function.R' path_to_final_summary='$NULLSIMULATION_NODE/3_truth/simulation_details.txt' out.file='$NULLSIMULATION_NODE/3_truth/truth_human_null.txt' astalavista.file=NULL gtf.file=NULL flattened.gtf.file='$REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding.flattened.nomerge.gff' missing.annot.file=NULL" $RCODEGEN/generate_truth_table_run.R $ROUT/generate_truth_table_human_null_node.Rout
+R CMD BATCH --no-restore --no-save "--args path_to_generate_truth_file='$RCODEGEN/generate_truth_table_function.R' path_to_final_summary='$NULLSIMULATION_DE/3_truth/simulation_details.txt' out.file='$NULLSIMULATION_DE/3_truth/truth_human_null.txt' astalavista.file=NULL gtf.file=NULL flattened.gtf.file='$REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding.flattened.nomerge.gff' missing.annot.file=NULL" $RCODEGEN/generate_truth_table_run.R $ROUT/generate_truth_table_human_null_de.Rout
 
-#R CMD BATCH --no-restore --no-save "--args path_to_generate_truth_file='$RCODEGEN/generate_truth_table_function.R' path_to_final_summary='$NONNULLSIMULATION_DE/3_truth/simulation_details.txt' out.file='$NONNULLSIMULATION_DE/3_truth/truth_human_non_null.txt' astalavista.file='$REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding_sorted.gtf_astalavista.gtf' gtf.file='$REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding.gtf' flattened.gtf.file='$REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding.flattened.nomerge.gff' missing.annot.file=NULL" $RCODEGEN/generate_truth_table_run.R $ROUT/generate_truth_table_human_nonnull_de.Rout
-#R CMD BATCH --no-restore --no-save "--args path_to_generate_truth_file='$RCODEGEN/generate_truth_table_function.R' path_to_final_summary='$NONNULLSIMULATION_NODE/3_truth/simulation_details.txt' out.file='$NONNULLSIMULATION_NODE/3_truth/truth_human_non_null.txt' astalavista.file='$REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding_sorted.gtf_astalavista.gtf' gtf.file='$REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding.gtf' flattened.gtf.file='$REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding.flattened.nomerge.gff' missing.annot.file=NULL" $RCODEGEN/generate_truth_table_run.R $ROUT/generate_truth_table_human_nonnull_node.Rout
+R CMD BATCH --no-restore --no-save "--args path_to_generate_truth_file='$RCODEGEN/generate_truth_table_function.R' path_to_final_summary='$NONNULLSIMULATION_DE/3_truth/simulation_details.txt' out.file='$NONNULLSIMULATION_DE/3_truth/truth_human_non_null.txt' astalavista.file='$REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding_sorted.gtf_astalavista.gtf' gtf.file='$REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding.gtf' flattened.gtf.file='$REFERENCEDIR/Homo_sapiens.GRCh37.71.primary_assembly.protein_coding.flattened.nomerge.gff' missing.annot.file=NULL" $RCODEGEN/generate_truth_table_run.R $ROUT/generate_truth_table_human_nonnull_de.Rout
 
-## Simulate reads for 6 samples (40 million pairs/sample),
-## for non-null situation, with and without differential expression
+## Simulate reads for 10 samples (40 million pairs/sample),
 
-### no DE
-#for n in 1 2 3 4 5 6 7 8 9 10 11 12 13 14
-#do
-#$RSEM/rsem-simulate-reads \
-#$REFERENCEDIR/rsem_reference/Homo_sapiens.GRCh37.71 \
-#$REFERENCEDIR/rsem_model/SRR493366.stat/SRR493366.highQ_adapted.model \
-#/Volumes/HDKoen/data/dtu/diff_splice_paper_Kvdb/hsapiens/no_diffexpression/non_null_simulation/1_reads/rsem_files/sample${n}.txt \
-#0.05 40000000 /Volumes/HDKoen/data/dtu/diff_splice_paper_Kvdb/hsapiens/no_diffexpression/non_null_simulation/1_reads/reads/sample${n}/sample_${n} \
-#--seed 123
-#done
-
-### with DE
 for n in 1 2 3 4 5 6 7 8 9 10
 do
 $RSEM/rsem-simulate-reads \

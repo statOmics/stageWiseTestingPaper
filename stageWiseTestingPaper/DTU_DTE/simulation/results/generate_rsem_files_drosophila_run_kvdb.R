@@ -1,23 +1,6 @@
 ## ----- generate_rsem_files_drosophila_run
 ## <<generate_rsem_files_drosophila_run.R>>
 
-
-#refdir
-#/Users/koenvandenberge/PhD_Data/dtu/diff_splice_paper_Kvdb/drosophila/reference_files
-
-#path_to_generate_rsem_files="/Users/koenvandenberge/PhD_Data/dtu/diff_splice_paper_Kvdb/software/Rcode/generate_rsem_files_function.R"
-#seed=123
-#isoform_results_file="/Users/koenvandenberge/PhD_Data/dtu/diff_splice_paper_Kvdb/drosophila/reference_files/rsem_model/SRR1501444.isoforms.results"
-#nbr_per_group=3
-#meandisp.file="/Users/koenvandenberge/PhD_Data/dtu/diff_splice_paper_Kvdb/drosophila/reference_files/Pickrell.Cheung.Mu.Phi.Estimates.rds"
-#outdirbase="/Users/koenvandenberge/PhD_Data/dtu/diff_splice_paper_Kvdb/drosophila/no_diffexpression"
-#librarysize=25000000
-#keepchr=NULL
-#nbr_diff_spliced=1000
-#nbr_diff_expr=0
-#fold_changes=NULL
-
-
 library(biomaRt)
 
 ## Read input arguments

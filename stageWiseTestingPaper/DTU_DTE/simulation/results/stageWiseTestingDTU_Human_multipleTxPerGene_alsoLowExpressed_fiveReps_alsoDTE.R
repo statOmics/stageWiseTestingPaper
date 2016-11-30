@@ -1,5 +1,4 @@
 ### simulation Human from Genome Biology paper Soneson 2016
-## DU probability of 0.33
 nrPerGroup=5
 baseDir <- "/Volumes/HDKoen2/data/dtu/diff_splice_paper_Kvdb/hsapiens/diffexpression/non_null_simulation_dge/non_null_simulation/"
 files=list.files(baseDir,recursive=TRUE)
@@ -58,7 +57,7 @@ tx2gene$transcript_id <- as.character(tx2gene$transcript_id)
 genesWithOneTx <- names(table(tx2gene$gene))[table(tx2gene$gene)==1]
 txFromGenesWithOneTx <- tx2gene$transcript[match(genesWithOneTx,tx2gene$gene)]
 txCount <- ceiling(data)
-#avoid NA p-values: remove genes with only one transcript, remove transcripts with all zero counts
+#remove genes with only one transcript, remove transcripts with all zero counts
 txCount <- txCount[!rownames(txCount)%in%txFromGenesWithOneTx,]
 txCount <- txCount[!rowSums(txCount)==0,]
 
@@ -322,8 +321,5 @@ lines(x=fdrSW,y=tprSW, lwd=2, col="green3")
 points(x=fdrSW[c(508,516,526)],y=tprSW[c(508,516,526)],pch=19,col="white")
 points(x=fdrSW[c(508,516,526)],y=tprSW[c(508,516,526)],col="green3")
 legend("bottomright",c("gene level","transcript level","transcript level stage-wise"),lty=1,col=c("black","red","green3"), bty="n", cex=1.25)
-
-
-
 
 

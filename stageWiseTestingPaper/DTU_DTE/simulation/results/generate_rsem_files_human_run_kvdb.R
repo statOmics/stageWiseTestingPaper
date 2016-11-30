@@ -37,7 +37,7 @@ dispvect <- meandisp$pickrell.cheung.phi
 ## Use the same ENSEMBL version as our gtf/reference to get chromosomes for genes
 ensembl <- useMart("ENSEMBL_MART_ENSEMBL", dataset = "hsapiens_gene_ensembl", 
                    host = "sep2013.archive.ensembl.org")
-#changed april 2013 to september 2013 because april was no longar available.
+#changed april 2013 to september 2013 because april was no longer available.
 
 ## Generate RSEM files for the individual samples
 source(path_to_generate_rsem_files)

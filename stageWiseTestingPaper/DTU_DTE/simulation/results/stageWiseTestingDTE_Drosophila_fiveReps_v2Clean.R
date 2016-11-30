@@ -82,21 +82,6 @@ alpha=0.05
 ################################
 ######## gene level test #######
 ################################
-## edgeR using gene level data: fails to pick up DTU genes with equal output between conditions.
-d=DGEList(geneData$counts)
-normMat <- geneData$length
-normMat <- normMat/exp(rowMeans(log(normMat)))
-o <- log(calcNormFactors(d$counts/normMat)) + log(colSums(d$counts/normMat))
-d$offset <- t(t(log(normMat))+o)
-d=estimateGLMCommonDisp(d,design)
-d=estimateGLMTrendedDisp(d,design)
-d=estimateGLMTagwiseDisp(d,design)
-plotBCV(d)
-fit=glmFit(d,design)
-lrt=glmLRT(fit,coef=2)
-significantGenes=rownames(lrt)[p.adjust(lrt$table$PValue,"BH")<alpha]
-length(significantGenes)
-
 ## tx level analysis edgeR using perGeneQValue to aggregate p-values.
 dTx=DGEList(txData$counts)
 dTx=calcNormFactors(dTx)
@@ -203,27 +188,4 @@ lines(x=performanceData$fdrTxSW, y=performanceData$tprTxSW, col=3, lwd=2)
 points(x=performanceData$fdrTxSW[c(508,516,526)],y=performanceData$tprTxSW[c(508,516,526)], pch=19,col="white")
 points(x=performanceData$fdrTxSW[c(508,516,526)],y=performanceData$tprTxSW[c(508,516,526)],col=3)
 legend("bottomright",c("gene-level","tx-level","tx-level stage-wise"),lty=1,col=1:3, bty="n", cex=1.25)
-
-### OFDR-TPR curve: only gene level curve changes
-plot(x=performanceData$ofdrQval, y=performanceData$tprQval, type="l", ylab="TPR", xlab="OFDR", ylim=c(0,1), lwd=2)
-abline(v=c(.01,.05,seq(.1,.9,.1)),col=alpha("grey",.5),lty=2)
-points(x=performanceData$ofdrQval[c(508,516,526)],y=performanceData$tprQval[c(508,516,526)], pch=19,col="white")
-points(x=performanceData$ofdrQval[c(508,516,526)],y=performanceData$tprQval[c(508,516,526)],col="black")
-lines(x=performanceData$fdrTx, y=performanceData$tprTxTx, col=2, lwd=2)
-points(x=performanceData$fdrTx[c(508,516,526)],y=performanceData$tprTxTx[c(508,516,526)], pch=19,col="white")
-points(x=performanceData$fdrTx[c(508,516,526)],y=performanceData$tprTxTx[c(508,516,526)],col=2)
-lines(x=performanceData$fdrTxSW, y=performanceData$tprTxSW, col=3, lwd=2)
-points(x=performanceData$fdrTxSW[c(508,516,526)],y=performanceData$tprTxSW[c(508,516,526)], pch=19,col="white")
-points(x=performanceData$fdrTxSW[c(508,516,526)],y=performanceData$tprTxSW[c(508,516,526)],col=3)
-legend("bottomright",c("gene-level","tx-level","tx-level stage-wise"),lty=1,col=1:3)
-## conclusion: OFDR control is somewhat worse than FDR control on the gene level, which makes sense because OFDR control is more stringent by involving the transcripts in the FDR calculation for the gene level test while a regular FDR control only looks at the screening hypothesis..
-
-
-
-
-
-
-
-
-
 

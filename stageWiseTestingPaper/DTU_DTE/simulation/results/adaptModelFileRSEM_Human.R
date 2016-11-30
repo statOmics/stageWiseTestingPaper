@@ -25,7 +25,3 @@ for(i in 1:length(transMatListNormalized)) transMatListAdapted[i] <- Reduce(past
 highQModel[c(129:132,720)] <- transMatListAdapted
 writeLines(highQModel,con="SRR493366.highQ_adapted.model")
 
-# File should be identical to Charlotte's file.
-
-
-

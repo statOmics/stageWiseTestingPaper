@@ -1,4 +1,3 @@
-
 # Genome Biology paper of Soneson et al. (2016): Simulation for Drosophila. 
 ### simulation Drosophila from Genome Biology paper Soneson 2016
 baseDir <- "/Volumes/HDKoen2/data/dtu/diff_splice_paper_Kvdb/drosophila/diffexpression/non_null_simulation_dge/non_null_simulation/"
@@ -344,24 +343,4 @@ lines(x=fdrSW,y=tprSW, lwd=2, col="green3")
 points(x=fdrSW[c(508,516,526)],y=tprSW[c(508,516,526)],pch=19,col="white")
 points(x=fdrSW[c(508,516,526)],y=tprSW[c(508,516,526)],col="green3")
 legend("bottomright",c("gene level","transcript level","transcript level stage-wise"),lty=1,col=c("black","red","green3"), bty="n", cex=1.25)
-
-### Based on OFDR
-### combine gene level, tx level and stage-wise analysis in one FDR-TPR plot.
-#gene level
-plot(x=ofdrSW,y=evalGeneLevelSW[,"tpr"], type="n", xlab="FDR", ylab="TPR", ylim=c(0.2,1), bty="l", main="Drosophila")
-abline(v=c(.01,.05,seq(.1,.9,.1)),col=alpha("grey",.8),lty=2)
-lines(x=ofdrSW,y=evalGeneLevelSW[,"tpr"], col="black", lwd=2)
-points(x=ofdrSW[c(508,516,526)],y=evalGeneLevelSW[c(508,516,526),"tpr"],pch=19,col="white")
-points(x=ofdrSW[c(508,516,526)],y=evalGeneLevelSW[c(508,516,526),"tpr"],col="black")
-#transcript level
-lines(x=evalDexSeqRegular[,"fdr"],y=evalDexSeqRegular[,"tpr"],col="red",lwd=2)
-points(x=evalDexSeqRegular[c(508,516,526),"fdr"],y=evalDexSeqRegular[c(508,516,526),"tpr"],pch=19,col="white")
-points(x=evalDexSeqRegular[c(508,516,526),"fdr"],y=evalDexSeqRegular[c(508,516,526),"tpr"],col="red")
-#stage-wise transcript level
-lines(x=fdrSW,y=tprSW, lwd=2, col="green3")
-points(x=fdrSW[c(508,516,526)],y=tprSW[c(508,516,526)],pch=19,col="white")
-points(x=fdrSW[c(508,516,526)],y=tprSW[c(508,516,526)],col="green3")
-legend("bottomright",c("gene level","transcript level","transcript level stage-wise"),lty=1,col=c("black","red","green3"), bty="n")
-
-
 
