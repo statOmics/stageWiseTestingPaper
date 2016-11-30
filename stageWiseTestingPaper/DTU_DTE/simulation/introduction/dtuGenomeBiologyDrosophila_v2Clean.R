@@ -2,7 +2,7 @@
 baseDir <- "/Users/koenvandenberge/PhD_Data/dtu/E-MTAB-3766/diff_splicing_comparison_drosophila/"
 files=list.files(baseDir)
 fastaFiles <- files[grep(x=files,pattern=".fq.gz")]
-meta=read.delim("/Users/koenvandenberge/PhD_Data/dtu/E-MTAB-3766/E-MTAB-3766.sdrf.txt",header=TRUE) #also includes fragment length and SD for kallisto
+meta=read.delim("/Users/koenvandenberge/PhD_Data/dtu/E-MTAB-3766/E-MTAB-3766.sdrf.txt",header=TRUE)
 names(fastaFiles) <- (meta$Array.Data.File[1:12])
 kallistoIndex="/Users/koenvandenberge/PhD_Data/dtu/diff_splice_paper_Kvdb/drosophila/reference_files/KallistoIndex/Drosophila_melanogaster.BDGP5.70.dna.toplevel"
 txConversionFile="/Users/koenvandenberge/PhD_Data/dtu/diff_splice_paper_Kvdb/drosophila/reference_files/KallistoIndex/TranscriptID_conversion.txt"
@@ -35,9 +35,7 @@ hlp=read.table(paste0(kallistoDir,"/",dir,"/abundance.tsv"), header=TRUE)
 data <- as.data.frame(sapply(sampleDirs,function(dir) read.table(paste0(kallistoDir,"/",dir,"/abundance.tsv"), header=TRUE)[,"est_counts"]), row.names=hlp$target_id)
 kal2tx=read.table(txConversionFile)
 colnames(kal2tx) <- c("kallisto","transcript")
-#rownames(data) <- kal2tx$transcript[match(kal2tx$kallisto,rownames(data))]
 rownames(data) <- kal2tx$transcript[match(kal2tx$kallisto,rownames(data))]
-#data <- data[!rowSums(data)==0,]
 
 ## the truth_tx file is incorrect for tx level evaluation: all tx from a gene get a differential splicing status, but actually only two of them should have.
 truth <- read.table(truthFile,header=TRUE)
