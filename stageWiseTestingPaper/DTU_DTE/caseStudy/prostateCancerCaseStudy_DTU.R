@@ -4,7 +4,6 @@
 #####################################################
 setwd("/Users/koenvandenberge/PhD_Data/dtu/humanCancer/prostateCancer/")
 library(tidyr)
-#dataMessy <- read.csv(file="kallisto_table_normalized_filtered.csv",header=TRUE)
 dataMessy <- read.csv(file="kallisto_table_unnormalized_unfiltered.csv",header=TRUE)
 dataMessy <- dataMessy[,c("target_id","est_counts","sample")]
 dataClean <- spread(dataMessy,key=sample,value=est_counts)
@@ -114,45 +113,6 @@ length(genesSW) ; length(genesTx)
 sum(genesTx%in%genesSW)
 sum(genesSW%in%genesTx) #all stage-wise genes are in tx-level analysis..
 
-## genes/tx found in only one method
-#genesOnlyStage <- genesSW[!genesSW%in%genesTx] #genes only found in a stage-wise analysis
-#genesOnlyTx <- genesTx[!genesTx%in%genesSW]
-#names(padjGeneListShaffer)=uniqueGenesStageII
-#txOnlyTx <- significantTranscriptsTx[!significantTranscriptsTx%in%significantTranscriptsStageWise] #tx you only find in tx level analysis
-#genesFromOnlyTxTx <- unique(dxr$groupID[dxr$featureID%in%txOnlyTx]) #genes that contain transcripts only found in a tx level analysis
-#mean(genesFromOnlyTxTx%in%genesSW) #nearly all genes that contain transcripts that are only significant in a tx-level analysis are also found in a SW analysis.'
-
-############################################################################
-## genes with significant transcripts found only in the tx-level analysis###
-############################################################################
-#number of transcripts for the significant genes
-tab1=table(table(as.character(txGeneData$gene[txGeneData$gene%in%genesSW])))
-#and for the genes with significant transcripts only found in a tx-level analysis
-tab2=table(table(as.character(txGeneData$gene[txGeneData$gene%in%genesFromOnlyTxTx])))
-#plot shows that genes with transcripts that are only significant in a tx-level analysis usually have more isoforms.
-m=matrix(0,nrow=66,ncol=2)
-rownames(m)=2:67
-m[match(names(tab1),rownames(m)),1]=tab1
-m[match(names(tab2),rownames(m)),2]=tab2
-plus30=colSums(m[30:nrow(m),])
-m2=rbind(m[1:29,],plus30)
-rownames(m2)[30]="31+"
-
-barplot(m2[,1], main="genes from transcripts that have only been found in a tx-level analysis", ylab="Frequency", xlab="Number of transcripts per gene", cex.lab=1.5, cex.axis=1.5)
-barplot(m2[,2],add=TRUE,col=alpha("skyblue",.5), yaxt="n", xaxt="n")
-#legend("topright",c("all genes found in stage-wise analysis","genes that contain transcripts only found in a transcript level analysis"), col=c("grey","skyblue"),lty=1,lwd=3, cex=1.3)
-
-### combine DTU and DTE analyses
-# intersection between DTE and DTU
-genesSWDTU=genesSW
-load("genesSWDTE.Rda")
-genesSWDTE=genesSW
-mean(genesSWDTU%in%genesSWDTE) #only 50%
-genesSWDTUNotDTE=genesSWDTU[!genesSWDTU%in%genesSWDTE]
-tab2=table(table(as.character(txGeneData$gene[txGeneData$gene%in%genesSWDTUNotDTE])))
-#make m from barplot
-plot(x=1:nrow(m),y=m[,2]/m[,1]) #fraction of genes that are DTU but not DTE decreases for a higher number of transcripts.
-
 ## the more transcripts within a gene the higher the probability it will be found to be differentially used.
 tab1=table(table(as.character(txGeneData$gene)))
 tab2=table(table(as.character(txGeneData$gene[txGeneData$gene%in%genesSWDTU])))
@@ -165,6 +125,7 @@ m2=rbind(m[1:29,],plus30)
 rownames(m2)[30]="31+"
 barplot(m2[,1], main="", ylab="Frequency", xlab="Number of transcripts per gene", cex.lab=1.5, cex.axis=1.5)
 barplot(m2[,2],add=TRUE,col=alpha("skyblue",.5), yaxt="n", xaxt="n")
+
 #isoform dominance is most studied mechanism. is this only the main DS mechanism for complex genes?
 complexGeneID=names(table(as.character(txGeneData$gene)))[table(as.character(txGeneData$gene))>2] #genes with 3+ tx
 table(unlist(lapply(padjGeneListShaffer[names(padjGeneListShaffer)%in%complexGeneID], function(x) sum(x<alphaAdjusted)))) #also many genes with 3+ tx differentially used
@@ -178,7 +139,7 @@ select(Homo.sapiens, keys="ENSG00000187244", columns="SYMBOL", keytype="ENSEMBL"
 
 #gene with second most transcripts DU (7)
 select(Homo.sapiens, keys="ENSG00000163110", columns="SYMBOL", keytype="ENSEMBL")
-# PDLIM5 was recently associated with prostate cancer in a large-scale GWAS over multiple stages!
+# PDLIM5 was recently associated with prostate cancer in a large-scale GWAS over multiple stages.
 
 #most significant genes
 head(sort(qvalDxr))
@@ -193,7 +154,7 @@ select(Homo.sapiens, keys="ENSG00000142973", columns="SYMBOL", keytype="ENSEMBL"
 
 #Hence, 2 out of 5 highly significant genes are previously associated with prostate cancer but through differential expression analysis. Here we show that they are in fact differentially spliced.
 
-### plot the PDLIM5 gene
+### plot the genes
 plotDTULog <- function(gene,transcripts,condition,nrGroups,nrPerGroup,interval,txInterval){
     #gene is gene you want to plot
     #transcripts are its transcripts
@@ -222,42 +183,8 @@ plotDTULog <- function(gene,transcripts,condition,nrGroups,nrPerGroup,interval,t
 }
 
 gene="ENSG00000163110"
+#gene="ENSG00000106258"
+#gene="ENSG00000134324"
 transcripts=dxr$featureID[dxr$groupID==gene]
 plotDTULog(gene=gene, transcripts=transcripts, condition=condition, nrGroups=2, nrPerGroup=c(14,14), interval=.14, txInterval=.01)
-
-
-
-
-
-
-
-
-
-### JUNK
-#### compare found DTU genes with genes found in paper
-library(Homo.sapiens)
-annotGenesSW <- select(Homo.sapiens, keys=genesSW, columns="SYMBOL", keytype="ENSEMBL")
-geneNamesSW <- annotGenesSW$SYMBOL
-geneNamesSW <- geneNamesSW[!is.na(geneNamesSW)]
-library(openxlsx)
-retainedIntronGenesPaper = read.xlsx(xlsxFile="/Users/koenvandenberge/PhD_Data/dtu/humanCancer/prostateCancer/highlyReliableSplicingsPaper.xlsx", sheet=6, rows=2:80, cols=1)
-mean(unique(retainedIntronGenesPaper[,1]) %in% geneNamesSW)
-retainedIntronGenesPaper = read.xlsx(xlsxFile="/Users/koenvandenberge/PhD_Data/dtu/humanCancer/prostateCancer/highlyReliableSplicingsPaper.xlsx", sheet=5, rows=2:80, cols=1)
-
-genesSWDTU=genesSW
-load("genesSWDTE.RData")
-genesSWDTE=genesSW
-rm(genesSW)
-onlyDtuGenes = genesSWDTU[!genesSWDTU%in%genesSWDTE]
-table(unlist(lapply(padjGeneListShaffer[onlyDtuGenes], function(x) sum(x<alphaAdjusted))))/sum(unlist(lapply(padjGeneListShaffer[onlyDtuGenes], function(x) sum(x<alphaAdjusted)))) #99.6% of genes that are DTU but not DTE show switch in dominance
-library(Homo.sapiens) ; library(EGSEA) ; library(AnnotationHub)
-entrezIDs <- select(Homo.sapiens, keys=onlyDtuGenes, columns="ENTREZID", keytype="ENSEMBL")
-entrezIDs <- entrezIDs$ENTREZID
-entrezIDs <- entrezIDs[!is.na(entrezIDs)]
-index = buildMSigDBIdx(entrezIDs=entrezIDs, geneSets="all", species="Homo sapiens", min.size=1)
-# EGSEA only works on voom...
-
-
-
-
 

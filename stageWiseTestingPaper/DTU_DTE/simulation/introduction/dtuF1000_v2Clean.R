@@ -21,6 +21,7 @@ rownames(meta) <- meta$sample
 
 ### get GTF file
 #library(rtracklayer)
+## download the GTF file and save it.
 #gtfWholeGenome="/Users/koenvandenberge/PhD_Data/dtu/annotation/Homo_sapiens.GRCh37.71.gtf"
 #gtff <- import(gtfWholeGenome)
 #gtff2 <- subset(gtff, seqnames == "1")
@@ -38,12 +39,12 @@ load(feature_lengths_file)
 load(tx_gene_file) #gene2tx
 tx2gene = gene2tx[,c(2,1)]
 
-truth_tx_file <- "/Users/koenvandenberge/Dropbox/edgeR_zeroinflation/simulated_data_bulk_tx/sim2_human/truth_transcript.txt"
+truth_tx_file <- "/Users/koenvandenberge/Dropbox/PhD/Research/stageWiseTesting/githubPaper/stageWiseTestingPaper/DTU_DTE/simulation/introduction/truth_transcript.txt"
 truth_tx <- read.delim(truth_tx_file, header = TRUE, as.is = TRUE)
 
 
 ### derive salmon transcript counts
-salmon_basedir <- "/Users/koenvandenberge/Dropbox/edgeR_zeroinflation/simulated_data_bulk_tx/sim2_human/salmon"
+salmon_basedir <- "/Users/koenvandenberge/PhD_Data/dtu/sim2_human/salmon"
 
 salmon_files <- list.files(salmon_basedir, pattern = "sample", full.names = TRUE)
 salmon_files <- salmon_files[file.info(salmon_files)$isdir]
@@ -95,7 +96,7 @@ hist(dxr_sal$pvalue)
 qval_dtu_salmon <- perGeneQValue(dxr_sal)
 
 ## ROC gene-level analysis
-truth_gene_file <- "/Users/koenvandenberge/Dropbox/edgeR_zeroinflation/simulated_data_bulk_tx/sim2_human/truth_gene.txt"
+truth_gene_file <- "/Users/koenvandenberge/Dropbox/PhD/Research/stageWiseTesting/githubPaper/stageWiseTestingPaper/DTU_DTE/simulation/introduction/truth_gene.txt"
 truth_gene <- read.delim(truth_gene_file, header = TRUE, as.is = TRUE, row.names = 1)
 cobra <- COBRAData(padj = data.frame(salmon_dexseq = qval_dtu_salmon,
                                      row.names = names(qval_dtu_salmon),
@@ -133,7 +134,4 @@ points(x=cobraplotTx@fdrtpr$FDR,y=cobraplotTx@fdrtpr$TPR, col="white", pch=19, c
 points(x=cobraplotTx@fdrtpr$FDR,y=cobraplotTx@fdrtpr$TPR, col="red", pch="o", cex=1.2)
 abline(v=c(0.01,0.05,0.1,seq(0.1,1,.1)), col=alpha("grey",.8), lty=2)
 legend("bottomright",c("gene-level","transcript-level"),col=c("black","red"),lty=1, bty="n", cex=1.5)
-
-
-
 

@@ -17,16 +17,19 @@ http://bowtie-bio.sourceforge.net/recount/
 
 ## Differential transcript usage
 
-The simulations for DTU analysis are based upon the framework provided by
+In the introduction, we analyse the sim2_human simulated data from
+C Soneson, MI Love, MD Robinson: Differential analyses for RNA-seq: transcript-level estimates improve gene-level inferences [version 2; referees: 2 approved]. [F1000Research 2016, 4:1521](10.12688/f1000research.7563.2).
+Details and required files for this simulation study can be found at [the supplementary data of that paper](https://f1000researchdata.s3.amazonaws.com/datasets/7563/315e2602-541f-4781-ab6e-76635dab0360_Sim_2_Quantification.html).
+
+All other simulations for DTU or DTE analysis are based upon the framework provided by
 C Soneson\*, KL Matthes\*, M Nowicka, CW Law & MD Robinson: Differential transcript usage from RNA-seq data: isoform pre-filtering improves performance of count-based methods. [Genome Biology 17:12 (2016)](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-015-0862-3).
 
 The simulation study requires some files to be downloaded a priori and we therefore suggest to consult their GitHub repository (https://github.com/markrobinsonuzh/diff_splice_paper).
 Our repository is similar to their repository, with some adaptations to the bash scripts and R scripts. Details on the changes are reported in the paper.
 
-
 The DTU case study considers the dataset provided by
 
-Shancheng Ren\*, Zhiyu Peng\*, Jian-Hua Mao\*, Yongwei Yu, Changjun Yin, Xin Gao, Zilian Cui, Jibin Zhang, Kang Yi, Weidong Xu, Chao Chen, Fubo Wang, Xinwu Guo, Ji Lu, Jun Yang, Min Wei, Zhijian Tian, Yinghui Guan, Liang Tang, Chuanliang Xu, Linhui Wang, Xu Gao, Wei Tian, Jian Wang, Huanming Yang, Jun Wang and Yinghao Sun. RNA-seq analysis of prostate cancer in the Chinese population identifies recurrent gene fusions, cancer-associated long noncoding RNAs and aberrant alternative splicings. [Cell Research (2012) 22:806–821.](http://www.nature.com/cr/journal/v22/n5/full/cr201230a.html)
+S Ren\*, Z Peng\*, J Mao\*, Y Yu, C Yin, X Gao, Z Cui, J Zhang, K Yi, W Xu, C Chen, F Wang, X Guo, J Lu, J Yang, M Wei, Z Tian, Y Guan, L Tang, C Xu, L Wang, X Gao, W Tian, J Wang, H Yang, J Wang and Y Sun. RNA-seq analysis of prostate cancer in the Chinese population identifies recurrent gene fusions, cancer-associated long noncoding RNAs and aberrant alternative splicings. [Cell Research (2012) 22:806–821.](http://www.nature.com/cr/journal/v22/n5/full/cr201230a.html)
 
 We downloaded the raw, unnormalized kallisto processed data from the [Bear's lair](http://biorxiv.org/content/early/2016/05/31/056200) project website (http://pachterlab.github.io/lair/).
 
