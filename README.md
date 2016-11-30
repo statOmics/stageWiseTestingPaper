@@ -18,7 +18,7 @@ http://bowtie-bio.sourceforge.net/recount/
 ## Differential transcript usage
 
 In the introduction, we analyse the sim2_human simulated data from
-C Soneson, MI Love, MD Robinson: Differential analyses for RNA-seq: transcript-level estimates improve gene-level inferences [version 2; referees: 2 approved]. [F1000Research 2016, 4:1521](10.12688/f1000research.7563.2).
+C Soneson, MI Love, MD Robinson: Differential analyses for RNA-seq: transcript-level estimates improve gene-level inferences [version 2; referees: 2 approved]. [F1000Research 2016, 4:1521](https://f1000research.com/articles/4-1521/v2).
 Details and required files for this simulation study can be found at [the supplementary data of that paper](https://f1000researchdata.s3.amazonaws.com/datasets/7563/315e2602-541f-4781-ab6e-76635dab0360_Sim_2_Quantification.html).
 
 All other simulations for DTU or DTE analysis are based upon the framework provided by
