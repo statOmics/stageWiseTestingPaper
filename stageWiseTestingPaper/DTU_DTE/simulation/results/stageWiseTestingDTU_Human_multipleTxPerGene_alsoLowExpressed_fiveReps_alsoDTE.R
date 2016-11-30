@@ -307,7 +307,8 @@ legend("topleft",c("Stage-wise","Regular"),lty=1,col=2:3, bty="n")
 
 ### combine gene level, tx level and stage-wise analysis in one FDR-TPR plot.
 #gene level
-plot(x=evalGeneLevelSW[,"fdr"],y=evalGeneLevelSW[,"tpr"], type="n", xlab="FDR", ylab="TPR", ylim=c(0.2,1), bty="l", main="Human")
+par(mar=c(5,4,4,1)+0.2)
+plot(x=evalGeneLevelSW[,"fdr"],y=evalGeneLevelSW[,"tpr"], type="n", xlab="False Discovery Proportion", ylab="True Positive Rate", ylim=c(0.2,1), bty="l", main="Human", cex.lab=1.5)
 abline(v=c(.01,.05,seq(.1,.9,.1)),col=alpha("grey",.8),lty=2)
 lines(x=evalGeneLevelSW[,"fdr"],y=evalGeneLevelSW[,"tpr"], col="black", lwd=2)
 points(x=evalGeneLevelSW[c(508,516,526),"fdr"],y=evalGeneLevelSW[c(508,516,526),"tpr"],pch=19,col="white")
@@ -320,7 +321,7 @@ points(x=evalDexSeqRegular[c(508,516,526),"fdr"],y=evalDexSeqRegular[c(508,516,5
 lines(x=fdrSW,y=tprSW, lwd=2, col="green3")
 points(x=fdrSW[c(508,516,526)],y=tprSW[c(508,516,526)],pch=19,col="white")
 points(x=fdrSW[c(508,516,526)],y=tprSW[c(508,516,526)],col="green3")
-legend("bottomright",c("gene level","transcript level","transcript level stage-wise"),lty=1,col=c("black","red","green3"), bty="n")
+legend("bottomright",c("gene level","transcript level","transcript level stage-wise"),lty=1,col=c("black","red","green3"), bty="n", cex=1.25)
 
 
 

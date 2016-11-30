@@ -131,7 +131,6 @@ sum(padjTx<.05) #nr of tx found
 genesAll=tx2gene$gene_id[match(rownames(txData$counts),tx2gene$transcript_id)]
 significantGenesTx=unique(genesAll[padjTx<.05])
 significantTxTx <- rownames(lrtTx)[padjTx<.05]
-
 ## using perGeneQValue
 pvals=lrtTx$table$PValue
 object=list()
@@ -139,7 +138,8 @@ object$groupID=genesAll
 qvals=perGeneQValue_kvdb(object=object,pvals=pvals)
 significantGenesQval=names(qvals)[qvals<=alpha]
 length(significantGenesQval)
-## stage-wise follow up
+
+## stage-wise follow up with Holm
 genesUnique <- unique(genesAll)
 pvalList=list()
 for(i in 1:length(genesUnique)){
@@ -157,7 +157,7 @@ hlp=mutate(hlp,padj=p.adjust(pvals,"holm"))
 
 
 ## using Fisher's method
-fishersMethod = function(x) pchisq(-2 * sum(log(x)),df=2*length(x),lower=FALSE) #from Mike Love
+fishersMethod = function(x) pchisq(-2 * sum(log(x)),df=2*length(x),lower=FALSE) #from Mike Love (https://mikelove.wordpress.com/2012/03/12/combining-p-values-fishers-method-sum-of-p-values-binomial/)
 dat=data.frame(gene=genesAll,pval=pvals)
 hlp=group_by(dat,by=genesAll)
 geneFisherP=summarize(hlp,fisherP=fishersMethod(pval))

@@ -106,9 +106,8 @@ sum(padjTx<.05) #nr of tx found
 genesAll=tx2gene$gene_id[match(rownames(txData$counts),tx2gene$transcript_id)]
 significantGenesTx=unique(genesAll[padjTx<.05])
 significantTxTx <- rownames(lrtTx)[padjTx<.05]
-
 ## using perGeneQValue
-source("/Users/koenvandenberge/Dropbox/PhD/Research/stageWiseTesting/perGeneQValue_kvdb.R"
+source("/Users/koenvandenberge/Dropbox/PhD/Research/stageWiseTesting/perGeneQValue_kvdb.R")
 library(Biobase)
 pvals=lrtTx$table$PValue
 object=list()
@@ -116,7 +115,8 @@ object$groupID=genesAll
 qvals=perGeneQValue_kvdb(object=object,pvals=pvals)
 significantGenesQval=names(qvals)[qvals<=alpha]
 length(significantGenesQval)
-## stage-wise follow up
+
+## stage-wise follow up using Holm
 genesUnique <- unique(genesAll)
 pvalList=list()
 for(i in 1:length(genesUnique)){
@@ -130,16 +130,6 @@ padjList=lapply(pvalList, function(x) p.adjust(x,method="holm"))
 ## faster follow up for loop
 hlp=group_by(data.frame(pvals=pvals,transcript=rownames(lrtTx)),by=factor(genesAll))
 hlp=mutate(hlp,padj=p.adjust(pvals,"holm"))
-
-
-## using Fisher's method
-fishersMethod = function(x) pchisq(-2 * sum(log(x)),df=2*length(x),lower=FALSE) #from Mike Love
-dat=data.frame(gene=genesAll,pval=pvals)
-hlp=group_by(dat,by=genesAll)
-geneFisherP=summarize(hlp,fisherP=fishersMethod(pval))
-geneFisherPadj <- p.adjust(geneFisherP$fisherP)
-significantGenesFisher <- geneFisherP$by[geneFisherPadj<.05]
-length(significantGenesFisher)
 
 ### number of genes found
 length(significantGenes) #edgeR gene level data
@@ -160,7 +150,7 @@ mean(!significantTxTx%in%truthAll$transcript_id[truthAll$status==1])
 
 ### FDR-TPR curve
 pvalSeq = c(1e-15,1e-10,1e-9,1e-8,1e-7,1e-6,seq(.00001,.005,by=.00001),seq(.005,1,by=.005))
-performanceData=data.frame(tprQval=NA, tprTxTx=NA, tprTxSW=NA, fdrQval=NA, fdrTx=NA, fdrTxSW=NA, ofdrQval=NA)
+performanceData=data.frame(tprQval=NA, tprTxTx=NA, tprTxSW=NA, fdrQval=NA, fdrTx=NA, fdrTxSW=NA)
 for(i in 1:length(pvalSeq)){
     print(i)
 	   alpha=pvalSeq[i]
@@ -172,6 +162,7 @@ for(i in 1:length(pvalSeq)){
 	   genesAllLoop=genesAll[selectedGenesId]
 	   pvalsLoop=pvals[selectedGenesId]
 	   txnamesLoop=rownames(lrtTx)[selectedGenesId]
+	   
 genesUniqueLoop=unique(genesAll[selectedGenesId])
 pvalList=list()
 for(j in 1:length(genesUniqueLoop)){
@@ -184,13 +175,6 @@ pvalList=pvalList[significantGenesQval] #only select selected genes
 padjList=lapply(pvalList, function(x) p.adjust(x,method="holm"))
 padjListShaffer=lapply(pvalList, function(x) adjustShafferDTE(x))
 significantTxSW <- unlist(lapply(strsplit(names(unlist(padjListShaffer)[unlist(padjListShaffer)<=alphaAdjusted]),split=".",fixed=TRUE), function(x) x[2]))
-	   #hlp=group_by(data.frame(pvals=pvalsLoop,transcript=txnamesLoop),by=factor(genesAllLoop))
-	   #hlp=mutate(hlp,padj=p.adjust(pvals,"holm"), falseGene=as.character(by)%in%truthAll$gene_id[truthAll$statusGene==0])
-	   #hlp=mutate(hlp,padj=adjustShafferDTE(pvals), falseGene=as.character(by)%in%truthAll$gene_id[truthAll$statusGene==0])	   
-	   #hlp$falseTx=FALSE
-	   #hlp$falseTx[hlp$padj<=alphaAdjusted] <- hlp$transcript[hlp$padj<=alphaAdjusted]%in%truthAll$transcript_id[truthAll$status==0]
-	   #hlpOfdr=summarize(hlp,ofdrFalse=any(c(falseGene,falseTx)))
-	   #significantTxSW <- as.character(hlp$transcript[hlp$padj<=alphaAdjusted])
 
 	   tprQval=mean(truthAll$gene_id[truthAll$status==1]%in%significantGenesQval)
 	   tprTxTx=mean(truthAll$transcript_id[truthAll$status==1]%in%significantTxTx)
@@ -201,11 +185,12 @@ significantTxSW <- unlist(lapply(strsplit(names(unlist(padjListShaffer)[unlist(p
 	   fdrTxTx=mean(!significantTxTx%in%truthAll$transcript_id[truthAll$status==1])
 	   fdrTxSW=mean(!significantTxSW%in%truthAll$transcript_id[truthAll$status==1])
 
-	   performanceData[i,] <- c(tprQval, tprTxTx, tprTxSW, fdrQval, fdrTxTx, fdrTxSW, ofdrQval)
+	   performanceData[i,] <- c(tprQval, tprTxTx, tprTxSW, fdrQval, fdrTxTx, fdrTxSW)
 }
 
-### regular FDR-TPR curve
-plot(x=performanceData$fdrQval, y=performanceData$tprQval, type="l", ylab="TPR", xlab="FDR", ylim=c(0,1), lwd=2, main="Human DTE analysis", cex.lab=1.5, cex.axis=1.5, bty="l")
+### FDR-TPR curve
+par(bty="l", mar=c(5,4.5,4,1))
+plot(x=performanceData$fdrQval, y=performanceData$tprQval, type="l", ylab="True Positive Rate", xlab="False Discovery Proportion", ylim=c(0,1), lwd=2, main="", cex.lab=1.5, cex.axis=1.5)
 abline(v=c(.01,.05,seq(.1,.9,.1)),col=alpha("grey",.5),lty=2)
 points(x=performanceData$fdrQval[c(508,516,526)],y=performanceData$tprQval[c(508,516,526)], pch=19,col="white")
 points(x=performanceData$fdrQval[c(508,516,526)],y=performanceData$tprQval[c(508,516,526)],col="black")
@@ -215,7 +200,7 @@ points(x=performanceData$fdrTx[c(508,516,526)],y=performanceData$tprTxTx[c(508,5
 lines(x=performanceData$fdrTxSW, y=performanceData$tprTxSW, col=3, lwd=2)
 points(x=performanceData$fdrTxSW[c(508,516,526)],y=performanceData$tprTxSW[c(508,516,526)], pch=19,col="white")
 points(x=performanceData$fdrTxSW[c(508,516,526)],y=performanceData$tprTxSW[c(508,516,526)],col=3)
-legend("bottomright",c("gene-level","tx-level","tx-level stage-wise"),lty=1,col=1:3, cex=1.5, bty="n")
+legend("bottomright",c("gene-level","tx-level","tx-level stage-wise"),lty=1,col=1:3, cex=1.25, bty="n")
 
 ### OFDR-TPR curve: only gene level curve changes
 plot(x=performanceData$ofdrQval, y=performanceData$tprQval, type="l", ylab="TPR", xlab="OFDR", ylim=c(0,1), lwd=2)
@@ -230,24 +215,6 @@ points(x=performanceData$fdrTxSW[c(508,516,526)],y=performanceData$tprTxSW[c(508
 points(x=performanceData$fdrTxSW[c(508,516,526)],y=performanceData$tprTxSW[c(508,516,526)],col=3)
 legend("bottomright",c("gene-level","tx-level","tx-level stage-wise"),lty=1,col=1:3)
 ## conclusion: OFDR control is somewhat worse than FDR control on the gene level, which makes sense because OFDR control is more stringent by involving the transcripts in the FDR calculation for the gene level test while a regular FDR control only looks at the screening hypothesis..
-
-
-
-
-
-
-
-
-
-
-
-
-# as stated in F1000 there is indeed no loss in FDR control when aggregating tx level DTE p-values to the gene level but the FDR is massive.
-
-
-
-
-
 
 
 

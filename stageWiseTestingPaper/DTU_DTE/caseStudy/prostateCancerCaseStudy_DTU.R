@@ -57,13 +57,13 @@ genesWithOneTx <- names(geneTable)[geneTable==1]
 txFromGenesWithOneTx <- tx2gene$Ensembl.Transcript.ID[tx2gene$Ensembl.Gene.ID%in%genesWithOneTx]
 dataClean <- dataClean[!rownames(dataClean)%in%as.character(txFromGenesWithOneTx),]
 
-#this leaves us with
-length(unique(txGeneData$gene)) #nr genes
-median(table(as.character(txGeneData$gene))) #median nr of tx/gene
-
 txGeneData = as.data.frame(cbind(rownames(dataClean),as.character(tx2gene$Ensembl.Transcript.ID[match(rownames(dataClean),tx2gene$Ensembl.Transcript.ID)]),as.character(tx2gene$Ensembl.Gene.ID[match(rownames(dataClean),tx2gene$Ensembl.Transcript.ID)])))
 colnames(txGeneData)=c("tx","transcript","gene")
 barplot(table(table(txGeneData$gene)), main="Distribution of number of tx per gene")
+
+#this leaves us with
+length(unique(txGeneData$gene)) #nr genes
+median(table(as.character(txGeneData$gene))) #median nr of tx/gene
 
 ### regular DEXSeq analysis
 library(DEXSeq)
@@ -170,7 +170,7 @@ complexGeneID=names(table(as.character(txGeneData$gene)))[table(as.character(txG
 table(unlist(lapply(padjGeneListShaffer[names(padjGeneListShaffer)%in%complexGeneID], function(x) sum(x<alphaAdjusted)))) #also many genes with 3+ tx differentially used
 sum((table(unlist(lapply(padjGeneListShaffer[names(padjGeneListShaffer)%in%complexGeneID], function(x) sum(x<alphaAdjusted))))/sum(names(padjGeneListShaffer)%in%complexGeneID))[-c(1:3)]) #proportion of these genes with 3 or more significant transcripts
 
-
+library(Homo.sapiens)
 #gene with most transcripts DU (8)
 select(Homo.sapiens, keys="ENSG00000187244", columns="SYMBOL", keytype="ENSEMBL")
 # BCAM (also called CD239) plays a role in epithelial skin cancer
@@ -179,6 +179,19 @@ select(Homo.sapiens, keys="ENSG00000187244", columns="SYMBOL", keytype="ENSEMBL"
 #gene with second most transcripts DU (7)
 select(Homo.sapiens, keys="ENSG00000163110", columns="SYMBOL", keytype="ENSEMBL")
 # PDLIM5 was recently associated with prostate cancer in a large-scale GWAS over multiple stages!
+
+#most significant genes
+head(sort(qvalDxr))
+select(Homo.sapiens, keys="ENSG00000106258", columns="SYMBOL", keytype="ENSEMBL")
+# CYP3A5 was also previously associated with prostate cancer and is among the most significant genes
+
+select(Homo.sapiens, keys="ENSG00000134324", columns="SYMBOL", keytype="ENSEMBL")
+# LPIN1 was previously associated with prostate cancer where it was shown to be overexpressed in comparison to normal tissue: https://www.ncbi.nlm.nih.gov/pubmed/25834103
+
+select(Homo.sapiens, keys="ENSG00000142973", columns="SYMBOL", keytype="ENSEMBL")
+#CYP4B1 not associated with prostate cancer but with bladder and breast cancer
+
+#Hence, 2 out of 5 highly significant genes are previously associated with prostate cancer but through differential expression analysis. Here we show that they are in fact differentially spliced.
 
 ### plot the PDLIM5 gene
 plotDTULog <- function(gene,transcripts,condition,nrGroups,nrPerGroup,interval,txInterval){

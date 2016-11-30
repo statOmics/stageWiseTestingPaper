@@ -51,13 +51,13 @@ dataClean <- dataClean[!is.na(match(rownames(dataClean),tx2gene$Ensembl.Transcri
 ## remove all zero rows
 dataClean <- dataClean[!rowSums(dataClean)==0,]
 
-#this leaves us with
-length(unique(txGeneData$gene)) #nr genes
-median(table(as.character(txGeneData$gene))) #median nr of tx/gene
-
 txGeneData = as.data.frame(cbind(rownames(dataClean),as.character(tx2gene$Ensembl.Transcript.ID[match(rownames(dataClean),tx2gene$Ensembl.Transcript.ID)]),as.character(tx2gene$Ensembl.Gene.ID[match(rownames(dataClean),tx2gene$Ensembl.Transcript.ID)])))
 colnames(txGeneData)=c("tx","transcript","gene")
 barplot(table(table(txGeneData$gene)), main="Distribution of number of tx per gene")
+
+#this leaves us with
+length(unique(txGeneData$gene)) #nr genes
+median(table(as.character(txGeneData$gene))) #median nr of tx/gene
 
 ### DTE analysis
 library(edgeR)

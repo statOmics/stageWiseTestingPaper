@@ -84,7 +84,7 @@ truthTx[dtuTx,"tx_ds_status"]=1
 ### DEXSeq analysis
 genesWithOneTx <- names(table(tx2gene$gene))[table(tx2gene$gene)==1]
 txFromGenesWithOneTx <- tx2gene$transcript[match(genesWithOneTx,tx2gene$gene)]
-txCount <- round(data)
+txCount <- ceiling(data)
 #avoid NA p-values
 txCount <- txCount[!rownames(txCount)%in%txFromGenesWithOneTx,]
 txCount <- txCount[!rowSums(txCount)==0,]

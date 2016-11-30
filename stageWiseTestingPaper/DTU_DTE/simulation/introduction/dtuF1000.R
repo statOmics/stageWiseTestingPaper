@@ -73,11 +73,10 @@ salmon_quant <- list(geneCOUNT_sal_simplesum = txi_salmonsimplesum$counts,
 stopifnot(all(colnames(salmon_quant$txCOUNT_sal) == rownames(meta)))
 
 #### DEXSEQ on salmon transcript counts
-## discard genes with only one transcript
+## discard genes with only one transcript and not expressed transcripts
 genesWithOneTx <- names(table(tx2gene$gene))[table(tx2gene$gene)==1]
 txFromGenesWithOneTx <- tx2gene$transcript[match(genesWithOneTx,tx2gene$gene)]
-txCount <- round(salmon_quant$txCOUNT_sal)
-#avoid NA p-values
+txCount <- ceiling(salmon_quant$txCOUNT_sal)
 txCount <- txCount[!rownames(txCount)%in%txFromGenesWithOneTx,]
 txCount <- txCount[!rowSums(txCount)==0,]
 
@@ -91,25 +90,25 @@ dxd_sal <- DEXSeqDataSet(countData = txCount,
 dxd_sal <- estimateSizeFactors(dxd_sal)
 dxd_sal <- estimateDispersions(dxd_sal)
 dxd_sal <- testForDEU(dxd_sal)
-dxr_sal <- DEXSeqResults(dxd_sal) #still couple NA pvals but not a lot
+dxr_sal <- DEXSeqResults(dxd_sal)
 hist(dxr_sal$pvalue)
 qval_dtu_salmon <- perGeneQValue(dxr_sal)
 
 ## stage-wise DEXSeq analysis
-significantGenes <- names(qval_dtu_salmon)[which(qval_dtu_salmon<.05)]
-alphaAdjusted <- 0.05*length(significantGenes)/length(qval_dtu_salmon)
-genesStageII <- dxr_sal$groupID[dxr_sal$groupID%in%significantGenes]
-uniqueGenesStageII <- unique(genesStageII)
-txStageII <- dxr_sal$featureID[dxr_sal$groupID%in%significantGenes]
-pvalStageII <- dxr_sal$pvalue[dxr_sal$featureID%in%txStageII]
-pvalGeneList <- list()
-for(i in 1:length(uniqueGenesStageII)){
-    id <- which(genesStageII==uniqueGenesStageII[i])
-    pvalHlp <- pvalStageII[id]
-    names(pvalHlp) <- txStageII[id]
-    pvalGeneList[[i]] <- pvalHlp
-}
-padjGeneList <- lapply(pvalGeneList,function(x) p.adjust(x,method="holm"))
+#significantGenes <- names(qval_dtu_salmon)[which(qval_dtu_salmon<.05)]
+#alphaAdjusted <- 0.05*length(significantGenes)/length(qval_dtu_salmon)
+#genesStageII <- dxr_sal$groupID[dxr_sal$groupID%in%significantGenes]
+#uniqueGenesStageII <- unique(genesStageII)
+#txStageII <- dxr_sal$featureID[dxr_sal$groupID%in%significantGenes]
+#pvalStageII <- dxr_sal$pvalue[dxr_sal$featureID%in%txStageII]
+#pvalGeneList <- list()
+#for(i in 1:length(uniqueGenesStageII)){
+#    id <- which(genesStageII==uniqueGenesStageII[i])
+#    pvalHlp <- pvalStageII[id]
+#    names(pvalHlp) <- txStageII[id]
+#    pvalGeneList[[i]] <- pvalHlp
+#}
+#padjGeneList <- lapply(pvalGeneList,function(x) p.adjust(x,method="holm"))
 
 
 ## ROC gene-level analysis
@@ -142,12 +141,13 @@ plot_roc(cobraplotTx,xaxisrange=c(0,0.1))
 
 ### combine in one plot
 library(scales)
-plot(x=cobraplotGene@fdrtprcurve$FDR,y=cobraplotGene@fdrtprcurve$TPR, type="l",col=2,lwd=1, xlim=c(0,0.6), ylab="True Positive Rate", xlab="False Discovery Rate")
-points(x=cobraplotGene@fdrtpr$FDR,y=cobraplotGene@fdrtpr$TPR, col=2, pch="o", cex=1.2)
-lines(x=cobraplotTx@fdrtprcurve$FDR,y=cobraplotTx@fdrtprcurve$TPR,col=4,lwd=1)
-points(x=cobraplotTx@fdrtpr$FDR,y=cobraplotTx@fdrtpr$TPR, col=4, pch="o", cex=1.2)
+par(bty="l")
+plot(x=cobraplotGene@fdrtprcurve$FDR,y=cobraplotGene@fdrtprcurve$TPR, type="l",col="black",lwd=1, xlim=c(0,0.7), ylab="True Positive Rate", xlab="False Discovery Proportion")
+points(x=cobraplotGene@fdrtpr$FDR,y=cobraplotGene@fdrtpr$TPR, col="black", pch="o", cex=1.2)
+lines(x=cobraplotTx@fdrtprcurve$FDR,y=cobraplotTx@fdrtprcurve$TPR,col="red",lwd=1)
+points(x=cobraplotTx@fdrtpr$FDR,y=cobraplotTx@fdrtpr$TPR, col="red", pch="o", cex=1.2)
 abline(v=c(0.01,0.05,0.1,seq(0.1,1,.1)), col=alpha("grey",.8), lty=2)
-legend("topleft",c("gene-level","transcript-level"),col=c(2,4),lty=1, bty="n")
+legend("topleft",c("gene-level","transcript-level"),col=c("black","red"),lty=1, bty="n")
 
 
 
@@ -225,12 +225,5 @@ points(x=fdrSW[c(508,516,526)],y=tprSW[c(508,516,526)],pch="o",col=2)
 lines(x=evalDexSeqRegular[,"fdr"],y=evalDexSeqRegular[,"tpr"],col=3,lwd=2)
 points(x=evalDexSeqRegular[c(508,516,526),"fdr"],y=evalDexSeqRegular[c(508,516,526),"tpr"],col=3,pch="o")
 abline(v=c(.01,.05,seq(.1,.9,.1)),col=alpha("grey",.5),lty=2)
-
-## there is no big difference in this simulation study, because there is no huge multiple testing correction: the number of genes is only 1800.
-
-
-
-
-
 
 
