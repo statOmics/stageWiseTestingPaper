@@ -29,10 +29,11 @@ adjustShafferDTE <- function(p){
     pAdj <- p*adjustments    
     pAdj[pAdj>1] <- 1
     # check monotone increase of adjusted p-values
-    if(any(diff(pAdj)<0)){
-	id <- which(diff(pAdj)<0)
-	pAdj[id+1] <- pAdj[id]
-    }
+    #if(any(diff(pAdj)<0)){
+	#id <- which(diff(pAdj)<0)
+	#pAdj[id+1] <- pAdj[id]
+    #}
+    pAdj = cummax(pAdj)
     return(pAdj)
 }
 

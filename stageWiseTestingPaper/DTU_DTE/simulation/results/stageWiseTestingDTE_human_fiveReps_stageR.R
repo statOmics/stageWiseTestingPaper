@@ -129,6 +129,8 @@ for(i in 1:length(pvalSeq)){
 
 	   performanceData[i,] <- c(tprQval, tprTxTx, tprTxSW, fdrQval, fdrTxTx, fdrTxSW)
 }
+performanceDataHuman=performanceData
+save(performanceDataHuman,file="~/performaneDataHuman.rda")
 
 ### FDR-TPR curve
 par(bty="l", mar=c(5,4.5,4,1))

@@ -127,6 +127,8 @@ for(i in 1:length(pvalSeq)){
 
 	   performanceData[i,] <- c(tprQval, tprTxTx, tprTxSW, fdrQval, fdrTxTx, fdrTxSW)
 }
+performanceDataDrosophila=performanceData
+save(performanceDataDrosophila,file="~/performanceDataDrosDTE.rda")
 
 ### regular FDR-TPR curve
 plot(x=performanceData$fdrQval, y=performanceData$tprQval, type="l", ylab="True Positive Rate", xlab="False Discovery Proportion", ylim=c(0,1), lwd=2, bty="l", main="", cex.lab=1.5)
