@@ -15,14 +15,6 @@ keep = rowSums(cpm(exprs(eset))>cpmOffset)>=2 #2cpm in 2 samples
 d = DGEList(exprs(eset)[keep,])
 colnames(d) = rownames(design)
 d = calcNormFactors(d)
-## QC
-library(RColorBrewer)
-palette(brewer.pal(8,"Dark2"))
-plotMDS(d,col=as.numeric(treat),labels=colnames(d))
-plot(density(cpm(d$counts[,1],log=TRUE)),type='n')
-for(i in 1:ncol(d$counts)) lines(density(cpm(d$counts[,i],log=TRUE)),col=i)
-plot(density(cpm(d$counts[,1],log=TRUE)),type='n')
-for(i in 1:ncol(d$counts)) lines(density(cpm(d$counts[,i],log=TRUE)),col=as.numeric(treat)[i]) 
 
 ## DE analysis
 d = estimateDisp(d,design)
@@ -46,42 +38,29 @@ results=sapply(lrt[1:ncol(L)],function(x) decideTestsDGE(x,p.value=alpha)) #alph
 rownames(results) <- rownames(lrt[[1]])
 names(results)=colnames(L)
 summary.TestResults(results)
-### Stagewise testing: Shaffer
+#unique genes
+sum(apply(results,1,function(row) any(row!=0)))
+
+### stage-wise testing with stageR
+library(stageR)
 nGenes=nrow(d)
-alpha=0.05
-tableF=topTags(lrt[[4]],n=nGenes,p.value=alpha)
-genesSI=rownames(tableF) #genes significant stage I
-alphaAdjusted=alpha*length(genesSI)/nGenes
+tableF=topTags(lrt[[4]],n=nGenes,sort.by="none")
+pScreen=tableF$table$PValue
+names(pScreen)=rownames(tableF$table)
+pConfirmation=sapply(lrt[1:3],function(x) x$table$PValue)
+dimnames(pConfirmation)=list(rownames(fit),c("t1","t2","t1t2"))
+
+stageRObj <- stageR(pScreen=pScreen , pConfirmation=pConfirmation, pScreenAdjusted=FALSE)
+stageRObj <- stageWiseAdjustment(stageRObj, method="none", alpha=0.05)
+resSW=getResults(stageRObj)
+colSums(resSW)
+
+padjStage <- getAdjustedPValues(stageRObj, onlySignificantGenes=FALSE, order=FALSE)
+genesSI <- rownames(padjStage)[padjStage[,"padjScreen"]<=0.05]
 # unique genes
 length(genesSI)
-
-pValuesStageIIShaffer=sapply(lrt[1:3],function(x) x$table$PValue)
-colnames(pValuesStageIIShaffer)=colnames(L)
-rownames(pValuesStageIIShaffer)=rownames(d)
-# set p-values of genes not passing Stage I to 1
-pValuesStageIIShaffer[!(rownames(pValuesStageIIShaffer)%in%genesSI),]=1
-
-contrastsAll=sapply(lrt[1:3],function(x) x$table$logFC )
-resultsStageIIShaffer=(pValuesStageIIShaffer<alphaAdjusted)*sign(contrastsAll)
-summary.TestResults(resultsStageIIShaffer)
-uniqueGenesSW=which(resultsStageIIShaffer[,1]!=0 | resultsStageIIShaffer[,2]!=0 | resultsStageIIShaffer[,3]!=0)
-length(uniqueGenesSW)
-
-genesNotFoundStageII <- genesSI[genesSI %in% rownames(resultsStageIIShaffer)[rowSums(resultsStageIIShaffer==0)==3]]
+genesNotFoundStageII <- genesSI[genesSI %in% rownames(resSW)[rowSums(resSW==0)==3]]
 length(genesNotFoundStageII) #stage I only genes
-sum(resultsStageIIShaffer[,1]!=0 & resultsStageIIShaffer[,2]!=0 & resultsStageIIShaffer[,3]==0) #genes DE in both without interaction
-sum(resultsStageIIShaffer[,1]!=0 & resultsStageIIShaffer[,2]==0) #genes only in T1
-sum(resultsStageIIShaffer[,1]==0 & resultsStageIIShaffer[,2]!=0) #genes only in T2
-sum(resultsStageIIShaffer[,1]!=0 & resultsStageIIShaffer[,2]!=0 & resultsStageIIShaffer[,3]!=0) #genes DE in all three contrasts.
-sum(resultsStageIIShaffer[,1]!=0 & resultsStageIIShaffer[,2]==0 & resultsStageIIShaffer[,3]!=0) #
-sum(resultsStageIIShaffer[,1]==0 & resultsStageIIShaffer[,2]!=0 & resultsStageIIShaffer[,3]!=0) #
-sum(resultsStageIIShaffer[,1]!=0 & resultsStageIIShaffer[,2]==0 & resultsStageIIShaffer[,3]==0) #
-
-
-## stagewise testing: Holm correction in stage II
-holmAdjP = t(apply(pValuesStageIIShaffer,1,function(x) p.adjust(x,method="holm")))
-resultsStageIIHolm = (holmAdjP<alphaAdjusted)*sign(contrastsAll)
-summary.TestResults(resultsStageIIHolm)
 
 
 ### only stage I genes and average FC
@@ -100,7 +79,8 @@ rownames(pValuesStageIIShafferAvg)=rownames(d)
 pValuesStageIIShafferAvg[!(rownames(pValuesStageIIShafferAvg)%in%genesSI),]=1
 
 contrastsAllAvg=sapply(lrtavg[1:4],function(x) x$table$logFC)
-resultsStageIIShafferAvg=(pValuesStageIIShafferAvg<alphaAdjusted)*sign(contrastsAllAvg)
+alphaAdjusted=length(genesSI)/nrow(fit)*0.05
+resultsStageIIShafferAvg=(pValuesStageIIShafferAvg<=alphaAdjusted)*sign(contrastsAllAvg)
 summary.TestResults(resultsStageIIShafferAvg)
 #Assessing the genes that were not significant in the previous stage II test without the average test.
 colMeans(abs(resultsStageIIShafferAvg[genesNotFoundStageII,]))
@@ -114,7 +94,7 @@ mean(rowSums(results[genesNotFoundStageII,]==0)==3)
 #### expression patterns between groups of genes
 par(mfrow=c(1,4))
 
-index=which(abs(resultsStageIIShaffer[,1])==1)
+index=which(abs(resSW[,1])==1)
 labels=fit$genes[index,1]
 logfc1 = fit$coef[index,3]
 logfc2 = fit$coef[index,3] + fit$coef[index,4]
@@ -123,7 +103,7 @@ log2fc2 = logfc2*log2(exp(1))
 matplot(t(cbind(log2fc1,log2fc2)),type="l",lty=1,col=1,ylab="log2(FC)",main="DE at t1",ylim=c(-5,8),xaxt="n")
 axis(1,at=c(1,2),labels=c("timePoint1","timePoint2"),cex.axis=1.5)
 
-index=which(abs(resultsStageIIShaffer[,2])==1)
+index=which(abs(resSW[,2])==1)
 labels=fit$genes[index,1]
 logfc1 = fit$coef[index,3]
 logfc2 = fit$coef[index,3] + fit$coef[index,4]
@@ -132,7 +112,7 @@ log2fc2 = logfc2*log2(exp(1))
 matplot(t(cbind(log2fc1,log2fc2)),type="l",lty=1,col=1,ylab="log2(FC)",main="DE at t2",ylim=c(-5,8),xaxt="n")
 axis(1,at=c(1,2),labels=c("timePoint1","timePoint2"),cex.axis=1.5)
 
-index=which(abs(resultsStageIIShaffer[,3])==1)
+index=which(abs(resSW[,3])==1)
 labels=fit$genes[index,1]
 logfc1 = fit$coef[index,3]
 logfc2 = fit$coef[index,3] + fit$coef[index,4]

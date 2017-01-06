@@ -2,6 +2,8 @@
 
 This repository contains all required code to reproduce the analyses for the stage-wise testing in RNA-Seq paper. The repository consists of two major folders: DGE (differential gene expression) and DTU_DTE (differential transcript usage, differential transcript expression), with the code to reproduce analyses from the respective applications. Both repositories contain a subfolder simulation and caseStudy.
 
+The stage-wise analyses were performed with the stageR package. Development is hosted at the [stageR GitHub repository](https://github.com/statOmics/stageR)
+
 ## Differential gene expression
 
 The simulations for the DGE analysis were based on the framework provided by the edgeR robust paper:

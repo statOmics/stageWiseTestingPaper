@@ -1,4 +1,4 @@
-setwd("/Users/koenvandenberge/Dropbox/PhD/Research/stageWiseTesting/githubPaper/stageWiseTestingPaper/DGE/simulation")
+setwd("/Users/koenvandenberge/Dropbox/PhD/Research/stageWiseTesting/githubPaper_public/stageWiseTestingPaper/DGE/simulation")
 source("http://130.60.190.4/robinson_lab/edgeR_robust/robust_simulation.R")
 library(scales)
 ## pickrell simulation: original
@@ -26,7 +26,7 @@ getFDR(pvals) #same -> no changes in simulation framework
 
 
 ### evaluate performance on multiple significance levels
-source("/Users/koenvandenberge/Dropbox/PhD/Research/stageWiseTesting/githubPaper/stageWiseTestingPaper/DGE/simulation/simulationDGE_helpFunctions.R")
+source("/Users/koenvandenberge/Dropbox/PhD/Research/stageWiseTesting/githubPaper_public/stageWiseTestingPaper/DGE/simulation/simulationDGE_helpFunctions.R")
 N=30
 nreps <- 5
 nCst <- 2000
@@ -163,7 +163,6 @@ for(iter in 1:N){
 }
 
 ## OFDR and power interaction plot for limma
-#pdf("~/Dropbox/phdKoen/stagewisetesting/figures/resultsDGEPaperEdgeR.pdf")
 layout(matrix(c(1,1,2),nrow=1,ncol=3))
 par(bty="l", cex.axis=2, cex.lab=2, mar=c(5,4.4,4,2)+0.1)
 boxplot(cbind(resultsMatRegular01Limma[,"fdrAllHyp"],resultsMatSW01Limma[,"fdrAllHypSW"],
@@ -200,7 +199,7 @@ boxplot(cbind(resultsMatRegular01Limma[,"powerInteraction"],resultsMatSW01Limma[
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",1))
 legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2.5, lwd=2)
-#dev.off()
+
 
 ### OFDR and power interaction plot for edgeR
 layout(matrix(c(1,1,2),nrow=1,ncol=3))
@@ -314,7 +313,7 @@ abline(v=c(0.7,1.5),col=alpha("grey",.8))
 
 
 
-### same but with three replicates.
+### same simulation but with three replicates.
 N=30
 nreps <- 3
 nCst <- 2000
@@ -451,7 +450,6 @@ for(iter in 1:N){
 }
 
 ## OFDR and power interaction plot for limma
-#pdf("~/Dropbox/phdKoen/stagewisetesting/figures/resultsDGEPaperEdgeR.pdf")
 layout(matrix(c(1,1,2),nrow=1,ncol=3))
 par(bty="l", cex.axis=2, cex.lab=2, mar=c(5,4.4,4,2)+0.1)
 boxplot(cbind(resultsMatRegular01Limma[,"fdrAllHyp"],resultsMatSW01Limma[,"fdrAllHypSW"],
@@ -476,9 +474,9 @@ lines(x=c(4.1,4.5),y=rep(0.1,each=2),col=2,lty=2, lwd=2)
 lines(x=c(4.9,5.3),y=rep(0.01,each=2),col=2,lty=2, lwd=2)
 lines(x=c(5.7,6.1),y=rep(0.05,each=2),col=2,lty=2, lwd=2)
 lines(x=c(6.5,6.9),y=rep(0.1,each=2),col=2,lty=2, lwd=2)
-text(x=0.25,y=0.12,"all hypotheses", cex=2)
-text(x=2.8,y=0.12,"OFDR", cex=2)
-text(x=5.4,y=0.12,"null genes", cex=2)
+text(x=0.25,y=0.105,"all hypotheses", cex=2)
+text(x=2.8,y=0.105,"OFDR", cex=2)
+text(x=5.4,y=0.105,"null genes", cex=2)
 legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2.5, lwd=2)
 
 boxplot(cbind(resultsMatRegular01Limma[,"powerInteraction"],resultsMatSW01Limma[,"powerInteractionSW"],
@@ -488,7 +486,6 @@ boxplot(cbind(resultsMatRegular01Limma[,"powerInteraction"],resultsMatSW01Limma[
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",1))
 legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2.5, lwd=2)
-#dev.off()
 
 ### OFDR and power interaction plot for edgeR
 layout(matrix(c(1,1,2),nrow=1,ncol=3))
