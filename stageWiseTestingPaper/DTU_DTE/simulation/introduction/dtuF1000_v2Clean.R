@@ -75,11 +75,11 @@ stopifnot(all(colnames(salmon_quant$txCOUNT_sal) == rownames(meta)))
 
 #### DEXSEQ on salmon transcript counts
 ## discard genes with only one transcript and not expressed transcripts
+txCount <- ceiling(salmon_quant$txCOUNT_sal)
+txCount <- txCount[!rowSums(txCount)==0,]
 genesWithOneTx <- names(table(tx2gene$gene))[table(tx2gene$gene)==1]
 txFromGenesWithOneTx <- tx2gene$transcript[match(genesWithOneTx,tx2gene$gene)]
-txCount <- ceiling(salmon_quant$txCOUNT_sal)
 txCount <- txCount[!rownames(txCount)%in%txFromGenesWithOneTx,]
-txCount <- txCount[!rowSums(txCount)==0,]
 
 ## regular DEXSeq analysis
 dxd_sal <- DEXSeqDataSet(countData = txCount, 

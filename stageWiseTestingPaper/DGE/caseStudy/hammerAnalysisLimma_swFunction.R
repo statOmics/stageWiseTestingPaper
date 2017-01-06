@@ -1,12 +1,13 @@
 setwd("/Users/koenvandenberge/Dropbox/PhD/Research/stageWiseTesting/")
 load("/Users/koenvandenberge/Dropbox/PhD/seminars/presentations/Janssen/hammer_eset.RData")
+source("~/Dropbox/PhD/Research/stageWiseTesting/githubPaper/stageWiseTestingPaper/functions/stageWiseTest.R")
 eset = hammer.eset ; rm(hammer.eset)
 eset@phenoData@data$Time #typo. Will do it ourself
 time = factor(rep(c("mo2","w2"),each=4),levels=c("w2","mo2"))
 eset@phenoData@data$protocol
 treat = factor(c("control","control","SNL","SNL","control","control","SNL","SNL"),levels=c("control","SNL"))
 design = model.matrix(~time*treat)
-rownames(design) = paste0(time,treat,"_",techRep)
+rownames(design) = paste0(time,treat,rep(1:2,4))
 colnames(design)[4] = "timeMo2xTreatSNL"
 
 library(edgeR) ; library(Biobase) ; library(limma)
@@ -48,34 +49,40 @@ length(uniqueGenesRegular) #nr of unique genes regular analysis
 
 
 ## stage-wise testing Shaffer
-nGenes=nrow(d)
 alpha=0.05
-tableF = topTableF(fit2, number=nGenes, sort.by="none", p.value=0.05)
-genesSI=rownames(tableF) #genes significant stage I
-alphaAdjusted=alpha*length(genesSI)/nGenes
-
-pValuesStageIIShaffer=sapply(1:3,function(i) topTable(fit2, coef=i, number=nGenes, sort.by="none")$P.Value)
+nGenes=nrow(d)
+tableF = topTableF(fit2, number=nGenes, sort.by="none")
+pScreen=tableF$P.Value
+pHyp=sapply(1:3,function(i) topTable(fit2, coef=i, number=nGenes, sort.by="none")$P.Value)
+pList=cbind(pScreen,pHyp)
+rownames(pList)=rownames(fit2)
+colnames(pList)=c("screening","t1","t2","t1t2")
+pAdjHammer = stageWiseTest(pList=pList, alpha=0.05, method=c(1,1,1), onlySignificantGenes=FALSE)
+# genes that pass the screening stage
+genesSI <- rownames(pAdjHammer)[pAdjHammer[,1]<=0.05]
+alphaAdjusted = max(pAdjHammer[genesSI,2])
+pValuesStageIIShaffer=pAdjHammer[,3:5]
 colnames(pValuesStageIIShaffer)=colnames(fit2$coefficients)
-rownames(pValuesStageIIShaffer)=rownames(d)
+
+
 # set p-values of genes not passing Stage I to 1
-pValuesStageIIShaffer[!(rownames(pValuesStageIIShaffer)%in%genesSI),]=1
+#pValuesStageIIShaffer[!(rownames(pValuesStageIIShaffer)%in%genesSI),]=1
 
 contrastsAll=sapply(1:3,function(i) topTable(fit2, coef=i, number=nGenes, sort.by="none")$logFC)
 rownames(contrastsAll)=rownames(fit2)
-resultsStageIIShaffer=(pValuesStageIIShaffer<alphaAdjusted)*sign(contrastsAll)
+resultsStageIIShaffer=(pValuesStageIIShaffer<alphaAdjusted)*sign(contrastsAll[rownames(pValuesStageIIShaffer),])
 summary.TestResults(resultsStageIIShaffer)
 length(genesSI) #nr unique genes stage I
 
 genesNotFoundStageII <- genesSI[genesSI %in% rownames(resultsStageIIShaffer)[rowSums(resultsStageIIShaffer==0)==3]]
 length(genesNotFoundStageII) #stage I only genes
 
-#significantFCInteractionLimma=contrastsAll[resultsStageIIShaffer[,3]!=0,3]
-#hist(significantFCInteractionLimma,50)
-#save(significantFCInteractionLimma,file="significantFCInteractionLimma.rda")
+significantFCInteractionLimma=contrastsAll[resultsStageIIShaffer[,3]!=0,3]
+hist(significantFCInteractionLimma,50)
+save(significantFCInteractionLimma,file="significantFCInteractionLimma.rda")
 
 ## none of the genes that were only found in the screening hypothesis are found in a regular analysis.
 mean(rowSums(res[genesNotFoundStageII,]==0)==3)
-
 
 ## plots
 #### expression patterns between groups of genes
@@ -108,6 +115,7 @@ log2fc1 = contrastsAll[index,1]
 log2fc2 = contrastsAll[index,2]
 matplot(t(cbind(log2fc1,log2fc2)),type="l",lty=1,col=1,ylab="log2(FC)",main="Stage I only",ylim=c(-5,8),xaxt="n")
 axis(1,at=c(1,2),labels=c("timePoint1","timePoint2"),cex.axis=1.4)
+
 
 
 

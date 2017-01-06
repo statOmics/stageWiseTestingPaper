@@ -17,26 +17,6 @@ library(dplyr)
 library(readr)
 library(tximport)
 source("/Users/koenvandenberge/Dropbox/PhD/Research/stageWiseTesting/perGeneQValue_kvdb.R")
-adjustShafferDTE <- function(p){
-    p <- sort(p)
-    n <- length(p)
-    pAdj <- vector(length=n)
-    adjustments <- c(n-1) #Shaffer. if only tx, p-values is zero.
-    if(n>1){
-	adjustments2 <- c(n-(2:n)+1) #Holm
-	adjustments <- c(adjustments,adjustments2)
-    }
-    pAdj <- p*adjustments    
-    pAdj[pAdj>1] <- 1
-    # check monotone increase of adjusted p-values
-    if(any(diff(pAdj)<0)){
-	id <- which(diff(pAdj)<0)
-	pAdj[id+1] <- pAdj[id]
-    }
-    return(pAdj)
-}
-
-
 
 
 ### kallisto quantification
@@ -80,9 +60,9 @@ library(edgeR)
 alpha=0.05
 
 ################################
-######## gene level test #######
+######## gene-level test #######
 ################################
-## tx level analysis edgeR using perGeneQValue to aggregate p-values.
+## tx-level analysis edgeR using perGeneQValue to aggregate p-values.
 dTx=DGEList(txData$counts)
 dTx=calcNormFactors(dTx)
 dTx=estimateGLMCommonDisp(dTx,design)
@@ -102,35 +82,20 @@ object=list()
 object$groupID=genesAll
 qvals=perGeneQValue_kvdb(object=object,pvals=pvals)
 significantGenesQval=names(qvals)[qvals<=alpha]
-length(significantGenesQval)
 
-## stage-wise follow up with Holm/Shaffer
-genesUnique <- unique(genesAll)
-pvalList=list()
-for(i in 1:length(genesUnique)){
-    id=which(genesAll==genesUnique[i])
-    pvalList[[i]]=pvals[id]
-    names(pvalList[[i]]) <- rownames(lrtTx)[id]
-}
-names(pvalList) <- genesUnique
-pvalList=pvalList[significantGenesQval] #only select selected genes
-padjList=lapply(pvalList, function(x) p.adjust(x,method="holm"))
-padjListShaffer=lapply(pvalList, function(x) adjustShafferDTE(x))
-sum(unlist(padjListShaffer)<=alphaAdjusted)
-## faster follow up for loop
-hlp=group_by(data.frame(pvals=pvals,transcript=rownames(lrtTx)),by=factor(genesAll))
-hlp=mutate(hlp,padj=p.adjust(pvals,"holm"))
-
-
-### number of genes found
-length(significantGenes) #edgeR gene level data
-length(significantGenesQval) #tx-level analysis, perGeneQValue aggregation
-length(significantGenesTx) #tx-level analysis: how many genes
+#stage-wise analysis with stageR
+library(stageR)
+pConfirmation=matrix(pvals,ncol=1,dimnames=list(rownames(lrtTx),"transcript"))
+stageRObj = stageRTx(pScreen=qvals, pConfirmation=pConfirmation, pScreenAdjusted=TRUE, tx2gene=tx2gene)
+stageRObj = stageWiseAdjustment(stageRObj, method="dte", alpha=0.05)
+head(getSignificantGenes(stageRObj))
+head(getSignificantTx(stageRObj))
+head(getAdjustedPValues(stageRObj, order=TRUE))
 
 ### TPR
-#I will combine DTU and DTE status because both result in DTE
+#I will combine DTU and DTE status because both result in DTE on the transcript level.
 truthAll = data.frame(gene_id=truth$gene_id, transcript_id=truth$transcript_id, status=as.numeric(truth$transcript_ds_status | truth$gene_de_status), statusGene=as.numeric(truth$gene_ds_status | truth$gene_de_status))
-#as in F1000 paper: compare gene level test on gene level and tx level test on tx level.
+#compare gene level test on gene level and tx level test on tx level.
 mean(truthAll$gene_id[truthAll$status==1]%in%significantGenesQval)
 mean(truthAll$transcript_id[truthAll$status==1]%in%significantTxTx)
 
@@ -141,30 +106,16 @@ mean(!significantTxTx%in%truthAll$transcript_id[truthAll$status==1])
 ### FDR-TPR curve
 pvalSeq = c(1e-15,1e-10,1e-9,1e-8,1e-7,1e-6,seq(.00001,.005,by=.00001),seq(.005,1,by=.005))
 performanceData=data.frame(tprQval=NA, tprTxTx=NA, tprTxSW=NA, fdrQval=NA, fdrTx=NA, fdrTxSW=NA)
+stageRObjSim = stageRTx(pScreen=qvals, pConfirmation=pConfirmation, pScreenAdjusted=TRUE, tx2gene=tx2gene)
+
 for(i in 1:length(pvalSeq)){
     print(i)
 	   alpha=pvalSeq[i]
 	   significantGenesQval <- names(qvals)[qvals<=alpha]
 	   significantTxTx <- rownames(lrtTx)[padjTx<=alpha]
 	   ## stage-wise follow up
-	   alphaAdjusted=alpha*length(significantGenesQval)/length(genesUnique)	   
-	   selectedGenesId=genesAll%in%significantGenesQval
-	   genesAllLoop=genesAll[selectedGenesId]
-	   pvalsLoop=pvals[selectedGenesId]
-	   txnamesLoop=rownames(lrtTx)[selectedGenesId]
-	   
-genesUniqueLoop=unique(genesAll[selectedGenesId])
-pvalList=list()
-for(j in 1:length(genesUniqueLoop)){
-    id=which(genesAllLoop==genesUniqueLoop[j])
-    pvalList[[j]]=pvalsLoop[id]
-    names(pvalList[[j]]) <- txnamesLoop[id]
-}
-names(pvalList) <- genesUniqueLoop
-pvalList=pvalList[significantGenesQval] #only select selected genes
-padjList=lapply(pvalList, function(x) p.adjust(x,method="holm"))
-padjListShaffer=lapply(pvalList, function(x) adjustShafferDTE(x))
-significantTxSW <- unlist(lapply(strsplit(names(unlist(padjListShaffer)[unlist(padjListShaffer)<=alphaAdjusted]),split=".",fixed=TRUE), function(x) x[2]))
+		stageRObjRes = stageWiseAdjustment(stageRObj, method="dte", alpha=0.05)
+		significantTxSW = rownames(getSignificantTx(stageRObjRes))
 	  
 	   tprQval=mean(truthAll$gene_id[truthAll$status==1]%in%significantGenesQval)
 	   tprTxTx=mean(truthAll$transcript_id[truthAll$status==1]%in%significantTxTx)

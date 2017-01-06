@@ -46,16 +46,14 @@ results=sapply(lrt[1:ncol(L)],function(x) decideTestsDGE(x,p.value=alpha)) #alph
 rownames(results) <- rownames(lrt[[1]])
 names(results)=colnames(L)
 summary.TestResults(results)
-# unique genes
-uniqueGenesRegular=which(results[,1]!=0 | results[,2]!=0 | results[,3]!=0)
-length(uniqueGenesRegular) #nr of unique genes regular analysis
-
 ### Stagewise testing: Shaffer
 nGenes=nrow(d)
 alpha=0.05
 tableF=topTags(lrt[[4]],n=nGenes,p.value=alpha)
 genesSI=rownames(tableF) #genes significant stage I
 alphaAdjusted=alpha*length(genesSI)/nGenes
+# unique genes
+length(genesSI)
 
 pValuesStageIIShaffer=sapply(lrt[1:3],function(x) x$table$PValue)
 colnames(pValuesStageIIShaffer)=colnames(L)

@@ -61,10 +61,6 @@ geneForEachTx <- tx2gene$gene_id[match(rownames(txCount),tx2gene$transcript_id)]
 genesWithOneTx <- names(which(table(tx2gene$gene_id[match(rownames(txCount),tx2gene$transcript_id)])==1))
 txCount <- txCount[!geneForEachTx %in% genesWithOneTx,]
 
-#genesWithOneTx <- names(table(tx2gene$gene))[table(tx2gene$gene)==1]
-#txFromGenesWithOneTx <- tx2gene$transcript[match(genesWithOneTx,tx2gene$gene)]
-#txCount <- txCount[!rownames(txCount)%in%txFromGenesWithOneTx,]
-
 geneTx <- tx2gene$gene_id[match(rownames(txCount),tx2gene$transcript_id)]
 sampleData <- data.frame(condition=factor(rep(0:1,each=5)))
 dxd <- DEXSeqDataSet(countData = txCount, 
@@ -76,48 +72,24 @@ dxd <- estimateSizeFactors(dxd)
 dxd <- estimateDispersions(dxd)
 dxd <- testForDEU(dxd)
 dxr <- DEXSeqResults(dxd)
-hist(dxr$pvalue,main="",xlab="p-value")
+#hist(dxr$pvalue,main="",xlab="p-value")
 qvalDxr <- perGeneQValue(dxr)
 
-## stage-wise DEXSeq analysis
-significantGenes <- names(qvalDxr)[which(qvalDxr<=.05)]
-alphaAdjusted <- 0.05*length(significantGenes)/length(qvalDxr)
-genesStageII <- dxr$groupID[dxr$groupID%in%significantGenes]
-uniqueGenesStageII <- unique(genesStageII)
-txStageII <- dxr$featureID[dxr$groupID%in%significantGenes]
-pvalStageII <- dxr$pvalue[dxr$featureID%in%txStageII]
-pvalGeneList <- list()
-for(i in 1:length(uniqueGenesStageII)){
-    id <- which(genesStageII==uniqueGenesStageII[i])
-    pvalHlp <- pvalStageII[id]
-    names(pvalHlp) <- txStageII[id]
-    pvalGeneList[[i]] <- pvalHlp
-}
-padjGeneListHolm <- lapply(pvalGeneList,function(x) p.adjust(x,method="holm"))
-
-### Shaffer correction
-adjustShaffer <- function(p){
-    p <- sort(p)
-    n <- length(p)
-    pAdj <- vector(length=n)
-    adjustments <- c(n-2,n-2) #Shaffer. if only two tx, p-value becomes zero
-    if(n>2){
-	adjustments2 <- c(n-(3:n)+1) #Holm
-	adjustments <- c(adjustments,adjustments2)
-    }
-    pAdj <- p*adjustments
-    pAdj[pAdj>1] <- 1
-    # check monotone increase of adjusted p-values
-    pAdj <- cummax(pAdj)
-    return(pAdj)
-}
-padjGeneListShaffer <- lapply(pvalGeneList,function(x) adjustShaffer(x))
-
-# number of transcripts found
-sum(p.adjust(dxr$pvalue,method="BH")<.05,na.rm=TRUE) ; sum(unlist(padjGeneListHolm)<alphaAdjusted) ; sum(unlist(padjGeneListShaffer)<alphaAdjusted)
-
-# number of genes found
-sum(qvalDxr<.05) ; length(unique(dxr$groupID[p.adjust(dxr$pvalue,"BH")<.05]))
+## stage-wise DEXSeq analysis using stageR
+devtools::install_github("statOmics/stageR",auth_token="cb649b65157aa8cd235a992d99cbe9384fd0eeb2")
+library(stageR)
+pScreen=qvalDxr
+pScreen[is.na(pScreen)]=1 #filtered p-values
+pConfirmation <- matrix(dxr$pvalue,ncol=1,dimnames=list(dxr$featureID,"transcript"))
+tx2gene <- as.data.frame(cbind(dxr$featureID,dxr$groupID))
+#DEXSeq performs independent filtering by default. We will filter the genes that have been filtered in the DEXSeq analysis.
+rowsNotFiltered=tx2gene[,2]%in%names(qvalDxr)
+pConfirmation=matrix(pConfirmation[rowsNotFiltered,],ncol=1,dimnames=list(dxr$featureID[rowsNotFiltered],"transcript"))
+tx2gene <- tx2gene[rowsNotFiltered,]
+stageRObj <- stageRTx(pScreen=pScreen, pConfirmation=pConfirmation, pScreenAdjusted=TRUE, tx2gene=tx2gene)
+stageRObj <- stageWiseAdjustment(stageRObj, method="dtu", alpha=0.05)
+dim(getSignificantGenes(stageRObj)) #this was 1055 in original code
+dim(getSignificantTx(stageRObj)) #this was 2273 in original code
 
 
 ### characterize the genes found
@@ -134,7 +106,7 @@ sum(trueGenes%in%genesTx)-sum(trueGenes%in%genesSW) #difference in true genes fo
 1-mean(genesSW%in%trueGenes)
 
 ### characterize the transcripts found
-txSW <- names(unlist(padjGeneListShaffer))[unlist(padjGeneListShaffer)<alphaAdjusted]
+txSW <- rownames(getSignificantTx(stageRObj))
 txTx <- dxr$featureID[p.adjust(dxr$pvalue,method="BH")<.05]
 txTx <- txTx[!is.na(txTx)]
 mean(txSW%in%txTx)
@@ -152,8 +124,7 @@ table(table(as.character(truth_tx$gene_id[truth_tx$transcript_ds_status==1]))) #
 mean(genesSW%in%genesTx)
 
 #proportion of truly spliced transcripts found
-significantTx=dxr$featureID[p.adjust(dxr$pvalue,method="BH")<.05]
-significantTx=significantTx[!is.na(significantTx)]
+significantTx=txSW
 mean(truth_tx$transcript_id[truth_tx$transcript_ds_status==1]%in%significantTx)
 
 #which differential proportions do we find as significant?
@@ -199,6 +170,7 @@ padjDexSeq <- p.adjust(pvalDexSeq,method="BH")
 tprSW <- vector(length=length(pvalSeq))
 fprSW <- vector(length=length(pvalSeq))
 fdrSW <- vector(length=length(pvalSeq))
+stageRObjSim <- stageRTx(pScreen=pScreen, pConfirmation=pConfirmation, pScreenAdjusted=TRUE, tx2gene=tx2gene)
 for(id in 1:length(pvalSeq)){
     #print(id)
     ### DEXSeq stage-wise
@@ -209,22 +181,25 @@ for(id in 1:length(pvalSeq)){
 	fdrSW[id]=0
 	next
     } else {
-    alphaAdjusted <- pvalSeq[id]*length(significantGenes)/length(qvalDxr)
-    
-    genesStageII <- dxr$groupID[dxr$groupID%in%significantGenes]
-    uniqueGenesStageII <- unique(genesStageII)
-    txStageII <- dxr$featureID[dxr$groupID%in%significantGenes]
-    pvalStageII <- dxr$pvalue[dxr$featureID%in%txStageII]
-    pvalGeneList <- list()
-    for(i in 1:length(uniqueGenesStageII)){
-        idHlp <- which(genesStageII==uniqueGenesStageII[i])
-        pvalHlp <- pvalStageII[idHlp]
-        names(pvalHlp) <- txStageII[idHlp]
-        pvalGeneList[[i]] <- pvalHlp
-    }
-    padjGeneList <- lapply(pvalGeneList,function(x) adjustShaffer(x))    
-    padj <- unlist(padjGeneList)
-    positives <- names(padj[padj<=alphaAdjusted])
+    	stageRRes <- stageWiseAdjustment(stageRObjSim, method="dtu", alpha=pvalSeq[id])
+    	positives <- rownames(getSignificantTx(stageRRes))
+
+    	#fast manual way
+    #alphaAdjusted <- pvalSeq[id]*length(significantGenes)/length(qvalDxr)
+    #genesStageII <- dxr$groupID[dxr$groupID%in%significantGenes]
+    #uniqueGenesStageII <- unique(genesStageII)
+    #txStageII <- dxr$featureID[dxr$groupID%in%significantGenes]
+    #pvalStageII <- dxr$pvalue[dxr$featureID%in%txStageII]
+    #pvalGeneList <- list()
+    #for(i in 1:length(uniqueGenesStageII)){
+    #    idHlp <- which(genesStageII==uniqueGenesStageII[i])
+    #    pvalHlp <- pvalStageII[idHlp]
+    #    names(pvalHlp) <- txStageII[idHlp]
+    #    pvalGeneList[[i]] <- pvalHlp
+    #}
+    #padjGeneList <- lapply(pvalGeneList,function(x) adjustShaffer(x))    
+    #padj <- unlist(padjGeneList)
+    #positives <- names(padj[padj<=alphaAdjusted])
     tprSW[id] <- mean(truth_tx$transcript_id[truth_tx$transcript_ds_status==1]%in%positives)  
     fprSW[id] <- mean(truth_tx$transcript_id[truth_tx$transcript_ds_status==0]%in%positives)
     truePosId <- truth_tx$transcript_ds_status[match(positives,truth_tx$transcript_id)]
@@ -322,5 +297,6 @@ lines(x=fdrSW,y=tprSW, lwd=2, col="green3")
 points(x=fdrSW[c(508,516,526)],y=tprSW[c(508,516,526)],pch=19,col="white")
 points(x=fdrSW[c(508,516,526)],y=tprSW[c(508,516,526)],col="green3")
 legend("bottomright",c("gene level","transcript level","transcript level stage-wise"),lty=1,col=c("black","red","green3"), bty="n", cex=1.25)
+
 
 

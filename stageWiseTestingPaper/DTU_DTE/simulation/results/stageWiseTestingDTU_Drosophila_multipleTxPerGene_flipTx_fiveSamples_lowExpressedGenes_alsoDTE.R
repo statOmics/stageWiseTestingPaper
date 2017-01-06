@@ -55,12 +55,16 @@ tx2gene$transcript_id <- as.character(tx2gene$transcript_id)
 
 
 ### DEXSeq analysis
-genesWithOneTx <- names(table(tx2gene$gene))[table(tx2gene$gene)==1]
-txFromGenesWithOneTx <- tx2gene$transcript[match(genesWithOneTx,tx2gene$gene)]
 txCount <- ceiling(data)
-# remove genes with only one transcript, remove transcripts with all zero counts
-txCount <- txCount[!rownames(txCount)%in%txFromGenesWithOneTx,]
+# remove transcripts with all zero counts,  genes with only one transcript
 txCount <- txCount[!rowSums(txCount)==0,]
+geneForEachTx <- tx2gene$gene_id[match(rownames(txCount),tx2gene$transcript_id)]
+genesWithOneTx <- names(which(table(tx2gene$gene_id[match(rownames(txCount),tx2gene$transcript_id)])==1))
+txCount <- txCount[!geneForEachTx %in% genesWithOneTx,]
+
+#genesWithOneTx <- names(table(tx2gene$gene))[table(tx2gene$gene)==1]
+#txFromGenesWithOneTx <- tx2gene$transcript[match(genesWithOneTx,tx2gene$gene)]
+#txCount <- txCount[!rownames(txCount)%in%txFromGenesWithOneTx,]
 
 geneTx <- tx2gene$gene_id[match(rownames(txCount),tx2gene$transcript_id)]
 sampleData <- data.frame(condition=factor(rep(c("A","B"),each=5)))
@@ -105,10 +109,7 @@ adjustShaffer <- function(p){
     pAdj <- p*adjustments
     pAdj[pAdj>1] <- 1
     # check monotone increase of adjusted p-values
-    if(any(diff(pAdj)<0)){
-	id <- which(diff(pAdj)<0)
-	pAdj[id+1] <- pAdj[id]
-    }
+    pAdj <- cummax(pAdj)
     return(pAdj)
 }
 padjGeneListShaffer <- lapply(pvalGeneList,function(x) adjustShaffer(x))
@@ -235,8 +236,8 @@ for(id in 1:length(pvalSeq)){
         names(pvalHlp) <- txStageII[idHlp]
         pvalGeneList[[i]] <- pvalHlp
     }
-    #padjGeneList <- lapply(pvalGeneList,function(x) adjustShaffer(x))
-    padjGeneList <- lapply(pvalGeneList,function(x) p.adjust(x,method="holm"))    
+    padjGeneList <- lapply(pvalGeneList,function(x) adjustShaffer(x))
+    #padjGeneList <- lapply(pvalGeneList,function(x) p.adjust(x,method="holm"))    
     padj <- unlist(padjGeneList)
     positives <- names(padj[padj<=alphaAdjusted])
     tprSW[id] <- mean(truth_tx$transcript_id[truth_tx$transcript_ds_status==1]%in%positives)  
