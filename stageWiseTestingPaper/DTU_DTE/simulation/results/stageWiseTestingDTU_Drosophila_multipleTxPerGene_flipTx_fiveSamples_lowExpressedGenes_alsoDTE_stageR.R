@@ -77,7 +77,7 @@ hist(dxr$pvalue, main="", xlab="p-value")
 qvalDxr <- perGeneQValue(dxr)
 
 ## stage-wise DEXSeq analysis using stageR
-devtools::install_github("statOmics/stageR",auth_token="cb649b65157aa8cd235a992d99cbe9384fd0eeb2")
+#devtools::install_github("statOmics/stageR")
 library(stageR)
 pScreen=qvalDxr
 pScreen[is.na(pScreen)]=1 #filtered p-values
