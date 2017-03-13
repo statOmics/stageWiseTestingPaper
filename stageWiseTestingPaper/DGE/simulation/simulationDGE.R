@@ -174,7 +174,7 @@ boxplot(cbind(resultsMatRegular01Limma[,"fdrAllHyp"],resultsMatSW01Limma[,"fdrAl
 	      resultsMatRegular01Limma[,"nullGeneFDR"],resultsMatSW01Limma[,"nullGeneFDRSW"],
 	      resultsMatRegular05Limma[,"nullGeneFDR"],resultsMatSW05Limma[,"nullGeneFDRSW"],
 	      resultsMatRegular10Limma[,"nullGeneFDR"],resultsMatSW10Limma[,"nullGeneFDRSW"]),
-	boxwex=.2,at=rep(seq(0.3,6.7,by=0.8),each=2)+rep(c(-.1,.1),9), border=rep(c("black","steelblue"),9), col=alpha(rep(c("black","steelblue"),9),.2), xaxt="n", yaxt="n", ylab="Empirical false discovery proportion", main="", xlab="False discovery rate cut-off")
+	boxwex=.2,at=rep(seq(0.3,6.7,by=0.8),each=2)+rep(c(-.1,.1),9), border=rep(c("steelblue","orange"),9), col=alpha(rep(c("steelblue","orange"),9),.2), xaxt="n", yaxt="n", ylab="Empirical false discovery proportion", main="", xlab="False discovery rate cut-off")
 axis(2,at=c(0.01,0.05,0.1))
 axis(1,at=c(seq(0.3,6.7,by=0.8)), labels=rep(c("1%","5%","10%"),3))
 abline(v=c(2.3,4.7),col=alpha("grey",1))
@@ -190,15 +190,15 @@ lines(x=c(6.5,6.9),y=rep(0.1,each=2),col=2,lty=2, lwd=2)
 text(x=0.25,y=0.12,"all hypotheses", cex=2)
 text(x=2.8,y=0.12,"OFDR", cex=2)
 text(x=5.4,y=0.12,"null genes", cex=2)
-legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2.5, lwd=2)
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=2.5, lwd=2)
 
 boxplot(cbind(resultsMatRegular01Limma[,"powerInteraction"],resultsMatSW01Limma[,"powerInteractionSW"],
 	      resultsMatRegular05Limma[,"powerInteraction"],resultsMatSW05Limma[,"powerInteractionSW"],
 	      resultsMatRegular10Limma[,"powerInteraction"],resultsMatSW10Limma[,"powerInteractionSW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power interaction effect", main="", bty="l")
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", ylab="Power interaction effect", main="", bty="l")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",1))
-legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2.5, lwd=2)
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=2.5, lwd=2)
 
 
 ### OFDR and power interaction plot for edgeR
@@ -213,7 +213,7 @@ boxplot(cbind(resultsMatRegular01[,"fdrAllHyp"],resultsMatSW01[,"fdrAllHypSW"],
 	      resultsMatRegular01[,"nullGeneFDR"],resultsMatSW01[,"nullGeneFDRSW"],
 	      resultsMatRegular05[,"nullGeneFDR"],resultsMatSW05[,"nullGeneFDRSW"],
 	      resultsMatRegular10[,"nullGeneFDR"],resultsMatSW10[,"nullGeneFDRSW"]),
-	boxwex=.2,at=rep(seq(0.3,6.7,by=0.8),each=2)+rep(c(-.1,.1),9), border=rep(c("black","steelblue"),9), col=alpha(rep(c("black","steelblue"),9),.2), xaxt="n", yaxt="n", ylab="Empirical false discovery proportion", main="", xlab="False discovery rate cut-off", ylim=c(0.005,0.13))
+	boxwex=.2,at=rep(seq(0.3,6.7,by=0.8),each=2)+rep(c(-.1,.1),9), border=rep(c("steelblue","orange"),9), col=alpha(rep(c("steelblue","orange"),9),.2), xaxt="n", yaxt="n", ylab="Empirical false discovery proportion", main="", xlab="False discovery rate cut-off", ylim=c(0.005,0.13))
 axis(2,at=c(0.01,0.05,0.1))
 axis(1,at=c(seq(0.3,6.7,by=0.8)), labels=rep(c("1%","5%","10%"),3))
 abline(v=c(2.3,4.7),col=alpha("grey",1))
@@ -229,15 +229,15 @@ lines(x=c(6.5,6.9),y=rep(0.1,each=2),col=2,lty=2, lwd=2)
 text(x=0.25,y=0.12,"all hypotheses", cex=2)
 text(x=2.8,y=0.12,"OFDR", cex=2)
 text(x=5.4,y=0.12,"null genes", cex=2)
-legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2.5, lwd=2)
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=2.5, lwd=2)
 
 boxplot(cbind(resultsMatRegular01[,"powerInteraction"],resultsMatSW01[,"powerInteractionSW"],
 	      resultsMatRegular05[,"powerInteraction"],resultsMatSW05[,"powerInteractionSW"],
 	      resultsMatRegular10[,"powerInteraction"],resultsMatSW10[,"powerInteractionSW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power interaction effect", main="", bty="l")
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", ylab="Power interaction effect", main="", bty="l")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",1))
-legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2.5, lwd=2)
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=2.5, lwd=2)
 
 
 ### t1 and t2 power limma
@@ -245,18 +245,18 @@ par(mfrow=c(1,2))
 boxplot(cbind(resultsMatRegular01Limma[,"powerT1"],resultsMatSW01Limma[,"powerT1SW"],
 	      resultsMatRegular05Limma[,"powerT1"],resultsMatSW05Limma[,"powerT1SW"],
 	      resultsMatRegular10Limma[,"powerT1"],resultsMatSW10Limma[,"powerT1SW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power t1", main="")
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", ylab="Power t1", main="")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
-legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2, lwd=2)
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=2, lwd=2)
 
 boxplot(cbind(resultsMatRegular01Limma[,"powerT2"],resultsMatSW01Limma[,"powerT2SW"],
 	      resultsMatRegular05Limma[,"powerT2"],resultsMatSW05Limma[,"powerT2SW"],
 	      resultsMatRegular10Limma[,"powerT2"],resultsMatSW10Limma[,"powerT2SW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power t2", main="")
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", ylab="Power t2", main="")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
-legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2, lwd=2)
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=2, lwd=2)
 
 
 
@@ -265,44 +265,43 @@ par(mfrow=c(1,2))
 boxplot(cbind(resultsMatRegular01[,"powerT1"],resultsMatSW01[,"powerT1SW"],
 	      resultsMatRegular05[,"powerT1"],resultsMatSW05[,"powerT1SW"],
 	      resultsMatRegular10[,"powerT1"],resultsMatSW10[,"powerT1SW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power t1", main="")
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", ylab="Power t1", main="")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
-legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2, lwd=2)
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=2, lwd=2)
 
 boxplot(cbind(resultsMatRegular01[,"powerT2"],resultsMatSW01[,"powerT2SW"],
 	      resultsMatRegular05[,"powerT2"],resultsMatSW05[,"powerT2SW"],
 	      resultsMatRegular10[,"powerT2"],resultsMatSW10[,"powerT2SW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power t2", main="")
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", ylab="Power t2", main="")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
-legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2, lwd=2)
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=2, lwd=2)
 
-### nr of genes found and FDR of extra genes for limma
+### nr of genes found limma and edgeR
 boxplot(cbind(resultsMatRegular01Limma[,"totalGenesFound"],resultsMatSW01Limma[,"totalGenesFoundSW"],
 	      resultsMatRegular05Limma[,"totalGenesFound"],resultsMatSW05Limma[,"totalGenesFoundSW"],
 	      resultsMatRegular10Limma[,"totalGenesFound"],resultsMatSW10Limma[,"totalGenesFoundSW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Number of genes found", main="")
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", ylab="Number of genes found", main="")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
-legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2, lwd=2)
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=2, lwd=2)
 
+boxplot(cbind(resultsMatRegular01[,"totalGenesFound"],resultsMatSW01[,"totalGenesFoundSW"],
+	      resultsMatRegular05[,"totalGenesFound"],resultsMatSW05[,"totalGenesFoundSW"],
+	      resultsMatRegular10[,"totalGenesFound"],resultsMatSW10[,"totalGenesFoundSW"]),
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", ylab="Number of genes found", main="")
+axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
+abline(v=c(0.7,1.5),col=alpha("grey",.8))
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=2, lwd=2)
+
+### FDP of extra genes for limma and edgeR
 boxplot(cbind(fdrExtraGenesRegular01Limma,
 	      fdrExtraGenesRegular05Limma,
 	      fdrExtraGenesRegular10Limma),
 	      boxwex=.2, at=c(0.3,1.1,1.9), col=alpha("black",.2), xaxt="n", ylab="FDP of the extra genes", main="")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
-
-
-### nr of genes found and FDR of extra genes for edgeR
-boxplot(cbind(resultsMatRegular01[,"totalGenesFound"],resultsMatSW01[,"totalGenesFoundSW"],
-	      resultsMatRegular05[,"totalGenesFound"],resultsMatSW05[,"totalGenesFoundSW"],
-	      resultsMatRegular10[,"totalGenesFound"],resultsMatSW10[,"totalGenesFoundSW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Number of genes found", main="")
-axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
-abline(v=c(0.7,1.5),col=alpha("grey",.8))
-legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2, lwd=2)
 
 boxplot(cbind(fdrExtraGenesRegular01,
 	      fdrExtraGenesRegular05,
@@ -461,7 +460,7 @@ boxplot(cbind(resultsMatRegular01Limma[,"fdrAllHyp"],resultsMatSW01Limma[,"fdrAl
 	      resultsMatRegular01Limma[,"nullGeneFDR"],resultsMatSW01Limma[,"nullGeneFDRSW"],
 	      resultsMatRegular05Limma[,"nullGeneFDR"],resultsMatSW05Limma[,"nullGeneFDRSW"],
 	      resultsMatRegular10Limma[,"nullGeneFDR"],resultsMatSW10Limma[,"nullGeneFDRSW"]),
-	boxwex=.2,at=rep(seq(0.3,6.7,by=0.8),each=2)+rep(c(-.1,.1),9), border=rep(c("black","steelblue"),9), col=alpha(rep(c("black","steelblue"),9),.2), xaxt="n", yaxt="n", ylab="Empirical false discovery proportion", main="", xlab="False discovery rate cut-off")
+	boxwex=.2,at=rep(seq(0.3,6.7,by=0.8),each=2)+rep(c(-.1,.1),9), border=rep(c("steelblue","orange"),9), col=alpha(rep(c("steelblue","orange"),9),.2), xaxt="n", yaxt="n", ylab="Empirical false discovery proportion", main="", xlab="False discovery rate cut-off")
 axis(2,at=c(0.01,0.05,0.1))
 axis(1,at=c(seq(0.3,6.7,by=0.8)), labels=rep(c("1%","5%","10%"),3))
 abline(v=c(2.3,4.7),col=alpha("grey",1))
@@ -477,15 +476,15 @@ lines(x=c(6.5,6.9),y=rep(0.1,each=2),col=2,lty=2, lwd=2)
 text(x=0.25,y=0.105,"all hypotheses", cex=2)
 text(x=2.8,y=0.105,"OFDR", cex=2)
 text(x=5.4,y=0.105,"null genes", cex=2)
-legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2.5, lwd=2)
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=2.5, lwd=2)
 
 boxplot(cbind(resultsMatRegular01Limma[,"powerInteraction"],resultsMatSW01Limma[,"powerInteractionSW"],
 	      resultsMatRegular05Limma[,"powerInteraction"],resultsMatSW05Limma[,"powerInteractionSW"],
 	      resultsMatRegular10Limma[,"powerInteraction"],resultsMatSW10Limma[,"powerInteractionSW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power interaction effect", main="", bty="l")
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", ylab="Power interaction effect", main="", bty="l")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",1))
-legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2.5, lwd=2)
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=2.5, lwd=2)
 
 ### OFDR and power interaction plot for edgeR
 layout(matrix(c(1,1,2),nrow=1,ncol=3))
@@ -499,7 +498,7 @@ boxplot(cbind(resultsMatRegular01[,"fdrAllHyp"],resultsMatSW01[,"fdrAllHypSW"],
 	      resultsMatRegular01[,"nullGeneFDR"],resultsMatSW01[,"nullGeneFDRSW"],
 	      resultsMatRegular05[,"nullGeneFDR"],resultsMatSW05[,"nullGeneFDRSW"],
 	      resultsMatRegular10[,"nullGeneFDR"],resultsMatSW10[,"nullGeneFDRSW"]),
-	boxwex=.2,at=rep(seq(0.3,6.7,by=0.8),each=2)+rep(c(-.1,.1),9), border=rep(c("black","steelblue"),9), col=alpha(rep(c("black","steelblue"),9),.2), xaxt="n", yaxt="n", ylab="Empirical false discovery proportion", main="", xlab="False discovery rate cut-off", ylim=c(0.005,0.13))
+	boxwex=.2,at=rep(seq(0.3,6.7,by=0.8),each=2)+rep(c(-.1,.1),9), border=rep(c("steelblue","orange"),9), col=alpha(rep(c("steelblue","orange"),9),.2), xaxt="n", yaxt="n", ylab="Empirical false discovery proportion", main="", xlab="False discovery rate cut-off", ylim=c(0.005,0.13))
 axis(2,at=c(0.01,0.05,0.1))
 axis(1,at=c(seq(0.3,6.7,by=0.8)), labels=rep(c("1%","5%","10%"),3))
 abline(v=c(2.3,4.7),col=alpha("grey",1))
@@ -515,15 +514,15 @@ lines(x=c(6.5,6.9),y=rep(0.1,each=2),col=2,lty=2, lwd=2)
 text(x=0.25,y=0.12,"all hypotheses", cex=2)
 text(x=2.8,y=0.12,"OFDR", cex=2)
 text(x=5.4,y=0.12,"null genes", cex=2)
-legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2.5, lwd=2)
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=2.5, lwd=2)
 
 boxplot(cbind(resultsMatRegular01[,"powerInteraction"],resultsMatSW01[,"powerInteractionSW"],
 	      resultsMatRegular05[,"powerInteraction"],resultsMatSW05[,"powerInteractionSW"],
 	      resultsMatRegular10[,"powerInteraction"],resultsMatSW10[,"powerInteractionSW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power interaction effect", main="", bty="l")
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", ylab="Power interaction effect", main="", bty="l")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",1))
-legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2.5, lwd=2)
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=2.5, lwd=2)
 
 
 ### t1 and t2 power limma
@@ -531,18 +530,18 @@ par(mfrow=c(1,2))
 boxplot(cbind(resultsMatRegular01Limma[,"powerT1"],resultsMatSW01Limma[,"powerT1SW"],
 	      resultsMatRegular05Limma[,"powerT1"],resultsMatSW05Limma[,"powerT1SW"],
 	      resultsMatRegular10Limma[,"powerT1"],resultsMatSW10Limma[,"powerT1SW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power t1", main="")
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", ylab="Power t1", main="")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
-legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2, lwd=2)
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=2, lwd=2)
 
 boxplot(cbind(resultsMatRegular01Limma[,"powerT2"],resultsMatSW01Limma[,"powerT2SW"],
 	      resultsMatRegular05Limma[,"powerT2"],resultsMatSW05Limma[,"powerT2SW"],
 	      resultsMatRegular10Limma[,"powerT2"],resultsMatSW10Limma[,"powerT2SW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power t2", main="")
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", ylab="Power t2", main="")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
-legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2, lwd=2)
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=2, lwd=2)
 
 
 
@@ -551,28 +550,38 @@ par(mfrow=c(1,2))
 boxplot(cbind(resultsMatRegular01[,"powerT1"],resultsMatSW01[,"powerT1SW"],
 	      resultsMatRegular05[,"powerT1"],resultsMatSW05[,"powerT1SW"],
 	      resultsMatRegular10[,"powerT1"],resultsMatSW10[,"powerT1SW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power t1", main="")
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", ylab="Power t1", main="")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
-legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2, lwd=2)
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=2, lwd=2)
 
 boxplot(cbind(resultsMatRegular01[,"powerT2"],resultsMatSW01[,"powerT2SW"],
 	      resultsMatRegular05[,"powerT2"],resultsMatSW05[,"powerT2SW"],
 	      resultsMatRegular10[,"powerT2"],resultsMatSW10[,"powerT2SW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Power t2", main="")
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", ylab="Power t2", main="")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
-legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2, lwd=2)
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=2, lwd=2)
 
-### nr of genes found and FDR of extra genes for limma
+### nr of genes found for limma and edgeR
 boxplot(cbind(resultsMatRegular01Limma[,"totalGenesFound"],resultsMatSW01Limma[,"totalGenesFoundSW"],
 	      resultsMatRegular05Limma[,"totalGenesFound"],resultsMatSW05Limma[,"totalGenesFoundSW"],
 	      resultsMatRegular10Limma[,"totalGenesFound"],resultsMatSW10Limma[,"totalGenesFoundSW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Number of genes found", main="")
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", ylab="Number of genes found", main="")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
-legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2, lwd=2)
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=2, lwd=2)
 
+
+boxplot(cbind(resultsMatRegular01[,"totalGenesFound"],resultsMatSW01[,"totalGenesFoundSW"],
+	      resultsMatRegular05[,"totalGenesFound"],resultsMatSW05[,"totalGenesFoundSW"],
+	      resultsMatRegular10[,"totalGenesFound"],resultsMatSW10[,"totalGenesFoundSW"]),
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", ylab="Number of genes found", main="")
+axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
+abline(v=c(0.7,1.5),col=alpha("grey",.8))
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=2, lwd=2)
+
+### FDR of extra genes for limma and edgeR
 boxplot(cbind(fdrExtraGenesRegular01Limma,
 	      fdrExtraGenesRegular05Limma,
 	      fdrExtraGenesRegular10Limma),
@@ -580,15 +589,6 @@ boxplot(cbind(fdrExtraGenesRegular01Limma,
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
 
-
-### nr of genes found and FDR of extra genes for edgeR
-boxplot(cbind(resultsMatRegular01[,"totalGenesFound"],resultsMatSW01[,"totalGenesFoundSW"],
-	      resultsMatRegular05[,"totalGenesFound"],resultsMatSW05[,"totalGenesFoundSW"],
-	      resultsMatRegular10[,"totalGenesFound"],resultsMatSW10[,"totalGenesFoundSW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("black","steelblue"),3), col=alpha(rep(c("black","steelblue"),3),.2), xaxt="n", ylab="Number of genes found", main="")
-axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
-abline(v=c(0.7,1.5),col=alpha("grey",.8))
-legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("black","steelblue"), bty="n", cex=2, lwd=2)
 
 boxplot(cbind(fdrExtraGenesRegular01,
 	      fdrExtraGenesRegular05,
