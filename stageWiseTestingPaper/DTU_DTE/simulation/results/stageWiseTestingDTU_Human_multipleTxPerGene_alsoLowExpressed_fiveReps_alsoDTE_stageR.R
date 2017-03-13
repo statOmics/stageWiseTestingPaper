@@ -88,8 +88,8 @@ pConfirmation=matrix(pConfirmation[rowsNotFiltered,],ncol=1,dimnames=list(dxr$fe
 tx2gene <- tx2gene[rowsNotFiltered,]
 stageRObj <- stageRTx(pScreen=pScreen, pConfirmation=pConfirmation, pScreenAdjusted=TRUE, tx2gene=tx2gene)
 stageRObj <- stageWiseAdjustment(stageRObj, method="dtu", alpha=0.05)
-dim(getSignificantGenes(stageRObj)) #this was 1055 in original code
-dim(getSignificantTx(stageRObj)) #this was 2273 in original code
+dim(getSignificantGenes(stageRObj))
+dim(getSignificantTx(stageRObj))
 
 
 ### characterize the genes found
@@ -282,21 +282,21 @@ legend("topleft",c("Stage-wise","Regular"),lty=1,col=2:3, bty="n")
 
 ### combine gene level, tx level and stage-wise analysis in one FDR-TPR plot.
 #gene level
-par(mar=c(5,4,4,1)+0.2)
+par(mar=c(5,4,4,1)+0.2, cex.axis=1.5)
 plot(x=evalGeneLevelSW[,"fdr"],y=evalGeneLevelSW[,"tpr"], type="n", xlab="False Discovery Proportion", ylab="True Positive Rate", ylim=c(0.2,1), bty="l", main="Human", cex.lab=1.5)
 abline(v=c(.01,.05,seq(.1,.9,.1)),col=alpha("grey",.8),lty=2)
-lines(x=evalGeneLevelSW[,"fdr"],y=evalGeneLevelSW[,"tpr"], col="black", lwd=2)
+lines(x=evalGeneLevelSW[,"fdr"],y=evalGeneLevelSW[,"tpr"], col="darkseagreen", lwd=3)
 points(x=evalGeneLevelSW[c(508,516,526),"fdr"],y=evalGeneLevelSW[c(508,516,526),"tpr"],pch=19,col="white")
-points(x=evalGeneLevelSW[c(508,516,526),"fdr"],y=evalGeneLevelSW[c(508,516,526),"tpr"],col="black")
+points(x=evalGeneLevelSW[c(508,516,526),"fdr"],y=evalGeneLevelSW[c(508,516,526),"tpr"],col="darkseagreen")
 #transcript level
-lines(x=evalDexSeqRegular[,"fdr"],y=evalDexSeqRegular[,"tpr"],col="red",lwd=2)
+lines(x=evalDexSeqRegular[,"fdr"],y=evalDexSeqRegular[,"tpr"],col="steelblue",lwd=3)
 points(x=evalDexSeqRegular[c(508,516,526),"fdr"],y=evalDexSeqRegular[c(508,516,526),"tpr"],pch=19,col="white")
-points(x=evalDexSeqRegular[c(508,516,526),"fdr"],y=evalDexSeqRegular[c(508,516,526),"tpr"],col="red")
+points(x=evalDexSeqRegular[c(508,516,526),"fdr"],y=evalDexSeqRegular[c(508,516,526),"tpr"],col="steelblue")
 #stage-wise transcript level
-lines(x=fdrSW,y=tprSW, lwd=2, col="green3")
+lines(x=fdrSW,y=tprSW, lwd=3, col="orange")
 points(x=fdrSW[c(508,516,526)],y=tprSW[c(508,516,526)],pch=19,col="white")
-points(x=fdrSW[c(508,516,526)],y=tprSW[c(508,516,526)],col="green3")
-legend("bottomright",c("gene level","transcript level","transcript level stage-wise"),lty=1,col=c("black","red","green3"), bty="n", cex=1.25)
+points(x=fdrSW[c(508,516,526)],y=tprSW[c(508,516,526)],col="orange")
+legend("bottomright",c("gene-level","transcript-level","transcript-level stage-wise"),lty=1,col=c("darkseagreen","steelblue","orange"), bty="n", cex=1.5)
 
 
 
