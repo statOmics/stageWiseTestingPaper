@@ -131,7 +131,7 @@ save(performanceData,file="performanceDataDTECaseStudySimulation.rda")
 
 
 ### FDR-TPR curve: dteResultsRealDataSimulation.pdf
-par(mar=c(4,5,4,1))
+par(mar=c(4,5,4,1), cex.axis=1.5)
 plot(x=performanceData$fdrQval, y=performanceData$tprQval, type="l", ylab="True Positive Rate", xlab="False Discovery Proportion", ylim=c(0,1), lwd=3, bty="l", main="", cex.lab=1.5, col="darkseagreen")
 abline(v=c(.01,.05,seq(.1,.9,.1)),col=alpha("grey",.5),lty=2)
 points(x=performanceData$fdrQval[c(508,516,526)],y=performanceData$tprQval[c(508,516,526)], pch=19,col="white")
@@ -142,7 +142,7 @@ points(x=performanceData$fdrTx[c(508,516,526)],y=performanceData$tprTxTx[c(508,5
 lines(x=performanceData$fdrTxSW, y=performanceData$tprTxSW, col="orange", lwd=3)
 points(x=performanceData$fdrTxSW[c(508,516,526)],y=performanceData$tprTxSW[c(508,516,526)], pch=19,col="white")
 points(x=performanceData$fdrTxSW[c(508,516,526)],y=performanceData$tprTxSW[c(508,516,526)],col="orange")
-legend("bottomright",c("gene-level","tx-level","tx-level stage-wise"),lty=1,col=c("darkseagreen","steelblue","orange"), bty="n", cex=1.25)
+legend("bottomright",c("gene-level","transcript-level","transcript-level stage-wise"),lty=1,col=c("darkseagreen","steelblue","orange"), bty="n", cex=1.25)
 
 
 ### DTU analysis
