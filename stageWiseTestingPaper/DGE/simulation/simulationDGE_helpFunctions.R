@@ -22,7 +22,6 @@ doRegularAnalysis <- function(data,L,alpha,design, fit){
 
 
 	return(c(overallFDR=overallFDR, powerInteraction=powerInteraction, fdrInteraction=fdrInt, fdrT1=fdrT1, fdrT2=fdrT2, fdrAllHyp=fdrAllHyp, powerT1=powerT1, powerT2=powerT2,   nullGeneFDR=nullGeneFDR , nrFalsePositiveNullGenes=length(nullGenesFound), totalGenesFound=length(allGenesFound)))
-
 }
 
 doRegularAnalysisLimma <- function(data,alpha,design, fit){
@@ -85,7 +84,7 @@ return(c(fdrScreenSW=fdrScreenSW, overallFDRSW=overallFDRSW, powerInteractionSW=
 
 
 doStageWiseAnalysisLimma <- function(data,alpha,design, fit){
-    	significantGenesStageI <- rownames(fit)[p.adjust(fit$F.p.value,"BH")<alpha]
+    significantGenesStageI <- rownames(fit)[p.adjust(fit$F.p.value,"BH")<alpha]
 	fit2 <- fit[significantGenesStageI,]
 	alphaAdjusted <- alpha*length(significantGenesStageI)/nrow(fit)
 	ttListSW <- list()
@@ -204,5 +203,68 @@ compareRegularAndStageWiseAnalysisLimma <- function(data,L,alpha,design,fit){
 	uniqueGenesRegular = allGenesFound[!allGenesFound%in%allGenesFoundSW]
 	fdrExtraGenesRegular = mean(uniqueGenesRegular%in%nonDeGenes)
 	return(fdrExtraGenesRegular)
+}
+
+doStageWiseJiangDoergeAnalysis <- function(data,L,alpha1,alpha2,design,fit){
+	lrtStep1 <- glmLRT(fit,contrast=L)
+	significantGenesStepI <- rownames(fit)[p.adjust(lrtStep1$table$PValue,"BH")<=alpha1]
+	fitStep2 <- fit[significantGenesStepI,]
+	lrtListStep2 <- list()
+	for(i in 1:ncol(L)) lrtListStep2[[i]] <- glmLRT(fitStep2,contrast=L[,i])
+	pvalMatrixStep2 <- do.call(cbind,lapply(lrtListStep2,function(x) x$table$PValue))
+	# aggregate p-values and perform FDR on aggregated set from Step 2 genes.
+	resultsStep2 = matrix(p.adjust(c(pvalMatrixStep2),"BH")<=alpha2,nrow=nrow(pvalMatrixStep2), ncol=ncol(pvalMatrixStep2), byrow=FALSE)
+	dimnames(resultsStep2) <- list(rownames(fitStep2),colnames(L))
+	foundT1 <- names(which(resultsStep2[,"t1"]==TRUE))
+	foundT2 <- names(which(resultsStep2[,"t2"]==TRUE))
+	foundInt <- names(which(resultsStep2[,"interaction"]==TRUE))
+	fdrT1 <- mean(!foundT1%in%indT1All)
+	fdrT2 <- mean(!foundT2%in%indT2All)
+	fdrInt <- mean(!foundInt%in%indInteractionAll)
+	fpT1 <- foundT1[!foundT1%in%indT1All]
+	fpT2 <- foundT2[!foundT2%in%indT2All]
+	fpInt <- foundInt[!foundInt%in%indInteractionAll]
+	fdrAllHyp <- (length(fpT1)+length(fpT2)+length(fpInt))/(length(foundT1)+length(foundT2)+length(foundInt))
+	overallFDR <- length(unique(c(fpT1,fpT2,fpInt)))/length(unique(c(foundT1,foundT2,foundInt)))
+	allGenesFound <- unique(c(foundT1,foundT2,foundInt))
+	nullGenesFound <- allGenesFound[allGenesFound%in%nonDeGenes]
+	nullGeneFDR <- length(nullGenesFound)/length(allGenesFound)
+
+	powerInteraction <- mean(indInteractionAll%in%foundInt)
+	powerT1 <- mean(indT1All%in%foundT1)
+	powerT2 <- mean(indT2All%in%foundT2)
+
+	return(c(overallFDR=overallFDR, powerInteraction=powerInteraction, fdrInteraction=fdrInt, fdrT1=fdrT1, fdrT2=fdrT2, fdrAllHyp=fdrAllHyp, powerT1=powerT1, powerT2=powerT2,   nullGeneFDR=nullGeneFDR , nrFalsePositiveNullGenes=length(nullGenesFound), totalGenesFound=length(allGenesFound)))
+}
+
+doStageWiseJiangDoergeAnalysisLimma <- function(data,L,alpha1,alpha2,design,fit){
+	significantGenesStepI <- rownames(fit)[p.adjust(fit$F.p.value,"BH")<=alpha1]
+	fitStep2 <- fit[significantGenesStepI,]
+	lrtListStep2 <- list()
+	for(i in 1:ncol(L)) lrtListStep2[[i]] <- topTable(fitStep2,coef=i,sort.by="none",number=Inf)
+	pvalMatrixStep2 <- do.call(cbind,lapply(lrtListStep2,function(x) x$P.Value))
+	# aggregate p-values and perform FDR on aggregated set from Step 2 genes.
+	resultsStep2 = matrix(p.adjust(c(pvalMatrixStep2),"BH")<=alpha2,nrow=nrow(pvalMatrixStep2), ncol=ncol(pvalMatrixStep2), byrow=FALSE)
+	dimnames(resultsStep2) <- list(rownames(fitStep2),colnames(L))
+	foundT1 <- names(which(resultsStep2[,"t1"]==TRUE))
+	foundT2 <- names(which(resultsStep2[,"t2"]==TRUE))
+	foundInt <- names(which(resultsStep2[,"interaction"]==TRUE))
+	fdrT1 <- mean(!foundT1%in%indT1All)
+	fdrT2 <- mean(!foundT2%in%indT2All)
+	fdrInt <- mean(!foundInt%in%indInteractionAll)
+	fpT1 <- foundT1[!foundT1%in%indT1All]
+	fpT2 <- foundT2[!foundT2%in%indT2All]
+	fpInt <- foundInt[!foundInt%in%indInteractionAll]
+	fdrAllHyp <- (length(fpT1)+length(fpT2)+length(fpInt))/(length(foundT1)+length(foundT2)+length(foundInt))
+	overallFDR <- length(unique(c(fpT1,fpT2,fpInt)))/length(unique(c(foundT1,foundT2,foundInt)))
+	allGenesFound <- unique(c(foundT1,foundT2,foundInt))
+	nullGenesFound <- allGenesFound[allGenesFound%in%nonDeGenes]
+	nullGeneFDR <- length(nullGenesFound)/length(allGenesFound)
+
+	powerInteraction <- mean(indInteractionAll%in%foundInt)
+	powerT1 <- mean(indT1All%in%foundT1)
+	powerT2 <- mean(indT2All%in%foundT2)
+
+	return(c(overallFDR=overallFDR, powerInteraction=powerInteraction, fdrInteraction=fdrInt, fdrT1=fdrT1, fdrT2=fdrT2, fdrAllHyp=fdrAllHyp, powerT1=powerT1, powerT2=powerT2,   nullGeneFDR=nullGeneFDR , nrFalsePositiveNullGenes=length(nullGenesFound), totalGenesFound=length(allGenesFound)))
 }
 
