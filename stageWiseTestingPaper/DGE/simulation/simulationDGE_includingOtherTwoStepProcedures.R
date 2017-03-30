@@ -322,6 +322,22 @@ axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
 legend("topleft",c("Standard","SW: Heller","SW: Jiang & Doerge"),lty=1,col=colorBrewerCols[c(3,1,2)], bty="n", cex=1, lwd=2)
 
+
+
+### total number of correct genes
+boxplot(cbind(resultsMatRegular01Limma[,"totalGenesFound"] - resultsMatRegular01Limma[,"nrFalsePositiveNullGenes"],
+	resultsMatSW01Limma[,"totalGenesFoundSW"] - resultsMatSW01Limma[,"nrFalsePositiveNullGenes"],
+	      resultsMatRegular05Limma[,"totalGenesFound"],
+	      resultsMatSW05Limma[,"totalGenesFoundSW"],
+	      resultsMatRegular10Limma[,"totalGenesFound"],
+	      resultsMatSW10Limma[,"totalGenesFoundSW"]),
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", ylab="Number of genes found", main="")
+axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
+abline(v=c(0.7,1.5),col=alpha("grey",.8))
+legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=2, lwd=2)
+
+
+
 ### FDP of extra genes for limma and edgeR
 boxplot(cbind(fdrExtraGenesRegular01Limma,
 	      fdrExtraGenesRegular05Limma,

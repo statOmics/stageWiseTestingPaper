@@ -1,9 +1,10 @@
 load("~/performanceDataDrosDTE.rda") #from DTE analysis script
 load("~/performanceDataHuman.rda") #from DTE analysis script
+library(scales)
 
 par(mfrow=c(1,2))
 par(bty="l", mar=c(5,4.5,4,1))
-plot(x=performanceDataDrosophila$fdrQval, y=performanceDataDrosophila$tprQval, type="l", ylab="True Positive Rate", xlab="False Discovery Proportion", ylim=c(0,1), lwd=3, bty="l", main="", cex.lab=1.5, col="darkseagreen")
+plot(x=performanceDataDrosophila$fdrQval, y=performanceDataDrosophila$tprQval, type="l", ylab="True Positive Rate", xlab="False Discovery Proportion", ylim=c(0,1), lwd=3, bty="l", main="Drosophila", cex.lab=1.5, col="darkseagreen")
 abline(v=c(.01,.05,seq(.1,.9,.1)),col=alpha("grey",.5),lty=2)
 points(x=performanceDataDrosophila$fdrQval[c(508,516,526)],y=performanceDataDrosophila$tprQval[c(508,516,526)], pch=19,col="white")
 points(x=performanceDataDrosophila$fdrQval[c(508,516,526)],y=performanceDataDrosophila$tprQval[c(508,516,526)],col="darkseagreen")
@@ -15,7 +16,7 @@ points(x=performanceDataDrosophila$fdrTxSW[c(508,516,526)],y=performanceDataDros
 points(x=performanceDataDrosophila$fdrTxSW[c(508,516,526)],y=performanceDataDrosophila$tprTxSW[c(508,516,526)],col="orange")
 legend("bottomright",c("gene-level","tx-level","tx-level stage-wise"),lty=1,col=c("darkseagreen","steelblue","orange"), bty="n", cex=1.25)
 
-plot(x=performanceDataHuman$fdrQval, y=performanceDataHuman$tprQval, type="l", ylab="True Positive Rate", xlab="False Discovery Proportion", ylim=c(0,1), lwd=3, main="", cex.lab=1.5, col="darkseagreen")
+plot(x=performanceDataHuman$fdrQval, y=performanceDataHuman$tprQval, type="l", ylab="True Positive Rate", xlab="False Discovery Proportion", ylim=c(0,1), lwd=3, main="Human", cex.lab=1.5, col="darkseagreen")
 abline(v=c(.01,.05,seq(.1,.9,.1)),col=alpha("grey",.5),lty=2)
 points(x=performanceDataHuman$fdrQval[c(508,516,526)],y=performanceDataHuman$tprQval[c(508,516,526)], pch=19,col="white")
 points(x=performanceDataHuman$fdrQval[c(508,516,526)],y=performanceDataHuman$tprQval[c(508,516,526)],col="darkseagreen")

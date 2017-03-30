@@ -1,9 +1,9 @@
 ### simulation Drosophila from Genome Biology paper Soneson 2016
 baseDir <- "/Users/koenvandenberge/PhD_Data/dtu/E-MTAB-3766/diff_splicing_comparison_drosophila/"
-files=list.files(baseDir)
-fastaFiles <- files[grep(x=files,pattern=".fq.gz")]
+#files=list.files(baseDir)
+#fastaFiles <- files[grep(x=files,pattern=".fq.gz")]
 meta=read.delim("/Users/koenvandenberge/PhD_Data/dtu/E-MTAB-3766/E-MTAB-3766.sdrf.txt",header=TRUE)
-names(fastaFiles) <- (meta$Array.Data.File[1:12])
+#names(fastaFiles) <- (meta$Array.Data.File[1:12])
 kallistoIndex="/Users/koenvandenberge/PhD_Data/dtu/diff_splice_paper_Kvdb/drosophila/reference_files/KallistoIndex/Drosophila_melanogaster.BDGP5.70.dna.toplevel"
 txConversionFile="/Users/koenvandenberge/PhD_Data/dtu/diff_splice_paper_Kvdb/drosophila/reference_files/KallistoIndex/TranscriptID_conversion.txt"
 kallistoDir="/Users/koenvandenberge/PhD_Data/dtu/E-MTAB-3766/diff_splicing_comparison_drosophila/quantifications/kallisto/"
@@ -14,9 +14,9 @@ library(scales)
 library(dplyr)
 
 ### kallisto quantification
-sample <- unlist(lapply(strsplit(names(fastaFiles),split="_"),function(x) x[3]))
-fileNames <- unlist(lapply(strsplit(names(fastaFiles),split=".",fixed=TRUE),function(x) x[1]))
-fileNames <- substr(x=fileNames,1,11)[seq(1,12,2)]
+#sample <- unlist(lapply(strsplit(names(fastaFiles),split="_"),function(x) x[3]))
+#fileNames <- unlist(lapply(strsplit(names(fastaFiles),split=".",fixed=TRUE),function(x) x[1]))
+#fileNames <- substr(x=fileNames,1,11)[seq(1,12,2)]
 #for(i in 1:6){
 #    pairedFasta <- fastaFiles[sample==i]
 #    cmd <- paste0("kallisto quant -i ",kallistoIndex,
