@@ -325,17 +325,19 @@ legend("topleft",c("Standard","SW: Heller","SW: Jiang & Doerge"),lty=1,col=color
 
 
 ### total number of correct genes
-boxplot(cbind(resultsMatRegular01Limma[,"totalGenesFound"] - resultsMatRegular01Limma[,"nrFalsePositiveNullGenes"],
-	resultsMatSW01Limma[,"totalGenesFoundSW"] - resultsMatSW01Limma[,"nrFalsePositiveNullGenes"],
-	      resultsMatRegular05Limma[,"totalGenesFound"],
-	      resultsMatSW05Limma[,"totalGenesFoundSW"],
-	      resultsMatRegular10Limma[,"totalGenesFound"],
-	      resultsMatSW10Limma[,"totalGenesFoundSW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", ylab="Number of genes found", main="")
+boxplot(cbind(resultsMatRegular01Limma[,"totalGenesFound"]-resultsMatRegular01Limma[,"nrFalsePositiveNullGenes"],
+	resultsMatSW01Limma[,"totalGenesFoundSW"]-resultsMatSW01Limma[,"nrFalsePositiveNullGenesSW"],
+	resultsMatJiangDoerge01Limma[,"totalGenesFound"]-resultsMatJiangDoerge01Limma[,"nrFalsePositiveNullGenes"],
+	resultsMatRegular05Limma[,"totalGenesFound"]-resultsMatRegular05Limma[,"nrFalsePositiveNullGenes"],
+	resultsMatSW05Limma[,"totalGenesFoundSW"]-resultsMatSW05Limma[,"nrFalsePositiveNullGenesSW"],
+	resultsMatJiangDoerge05Limma[,"totalGenesFound"]-resultsMatJiangDoerge05Limma[,"nrFalsePositiveNullGenes"],
+	resultsMatRegular10Limma[,"totalGenesFound"]-resultsMatRegular10Limma[,"nrFalsePositiveNullGenes"],
+	resultsMatSW10Limma[,"totalGenesFoundSW"]-resultsMatSW10Limma[,"nrFalsePositiveNullGenesSW"],
+	resultsMatJiangDoerge10Limma[,"totalGenesFound"]-resultsMatJiangDoerge10Limma[,"nrFalsePositiveNullGenes"]),
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=3)+rep(c(-.25,0,.25),3), border=rep(colorBrewerCols[c(3,1,2)],3), col=alpha(rep(colorBrewerCols[c(3,1,2)],3),.2), xaxt="n", ylab="Number of correct genes found", main="")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
-legend("bottomright",c("Standard","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=2, lwd=2)
-
+legend("topleft",c("Standard","SW: Heller","SW: Jiang & Doerge"),lty=1,col=colorBrewerCols[c(3,1,2)], bty="n", cex=1, lwd=2)
 
 
 ### FDP of extra genes for limma and edgeR
