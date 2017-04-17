@@ -71,6 +71,7 @@ fdrExtraGenesRegular10Limma <- vector(length=N)
 
 
 for(iter in 1:N){
+	cat(iter)
 	set.seed(iter)
 	libSize = sample(round(seq(15e6,20e6,length.out=nreps*4))) #high libSize
 	nTags <- 13e3
@@ -309,6 +310,39 @@ boxplot(cbind(fdrExtraGenesRegular01,
 	      boxwex=.2, at=c(0.3,1.1,1.9), col=alpha("black",.2), xaxt="n", ylab="FDP of the extra genes", main="")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
+
+### small summary
+## OFDR and power interaction plot for limma
+layout(matrix(c(1,2,3),nrow=1,ncol=3))
+par(bty="l", cex.axis=2, cex.lab=2, mar=c(5,4.4,4,2)+0.1)
+boxplot(cbind(resultsMatRegular01Limma[,"overallFDR"],resultsMatSW01Limma[,"overallFDRSW"],
+	      resultsMatRegular05Limma[,"overallFDR"],resultsMatSW05Limma[,"overallFDRSW"],
+	      resultsMatRegular10Limma[,"overallFDR"],resultsMatSW10Limma[,"overallFDRSW"]),
+	boxwex=.2,at=rep(seq(0.3,1.9,by=0.8),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", yaxt="n", ylab="OFDR", main="")
+axis(2,at=c(0.01,0.05,0.1))
+axis(1,at=c(seq(0.3,6.7,by=0.8)), labels=rep(c("1%","5%","10%"),3))
+lines(x=c(0.1,0.5),y=rep(0.01,each=2),col=2,lty=2, lwd=2)
+lines(x=c(0.9,1.3),y=rep(0.05,each=2),col=2,lty=2, lwd=2)
+lines(x=c(1.7,2.1),y=rep(0.1,each=2),col=2,lty=2, lwd=2)
+legend("bottomright",c("Conventional","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=1.25, lwd=2)
+
+boxplot(cbind(resultsMatRegular01Limma[,"powerInteraction"],resultsMatSW01Limma[,"powerInteractionSW"],
+	      resultsMatRegular05Limma[,"powerInteraction"],resultsMatSW05Limma[,"powerInteractionSW"],
+	      resultsMatRegular10Limma[,"powerInteraction"],resultsMatSW10Limma[,"powerInteractionSW"]),
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", ylab="Power interaction effect", main="", bty="l")
+axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
+abline(v=c(0.7,1.5),col=alpha("grey",1))
+legend("bottomright",c("Conventional","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=1.25, lwd=2)
+
+boxplot(cbind(resultsMatRegular01Limma[,"powerT1"],resultsMatSW01Limma[,"powerT1SW"],
+	      resultsMatRegular05Limma[,"powerT1"],resultsMatSW05Limma[,"powerT1SW"],
+	      resultsMatRegular10Limma[,"powerT1"],resultsMatSW10Limma[,"powerT1SW"]),
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", ylab="Main effect power", main="")
+axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
+abline(v=c(0.7,1.5),col=alpha("grey",.8))
+legend("bottomright",c("Conventional","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=1.25, lwd=2)
+mtext("False dicovery rate cut-off", side=1, outer=TRUE,line=-2,cex=1.75)
+
 
 
 
