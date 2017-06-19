@@ -324,6 +324,7 @@ axis(1,at=c(seq(0.3,6.7,by=0.8)), labels=rep(c("1%","5%","10%"),3))
 lines(x=c(0.1,0.5),y=rep(0.01,each=2),col=2,lty=2, lwd=2)
 lines(x=c(0.9,1.3),y=rep(0.05,each=2),col=2,lty=2, lwd=2)
 lines(x=c(1.7,2.1),y=rep(0.1,each=2),col=2,lty=2, lwd=2)
+abline(v=c(0.7,1.5),col=alpha("grey",1))
 legend("bottomright",c("Conventional","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=1.25, lwd=2)
 
 boxplot(cbind(resultsMatRegular01Limma[,"powerInteraction"],resultsMatSW01Limma[,"powerInteractionSW"],
@@ -337,11 +338,11 @@ legend("bottomright",c("Conventional","Stage-wise"),lty=1,col=c("steelblue","ora
 boxplot(cbind(resultsMatRegular01Limma[,"powerT1"],resultsMatSW01Limma[,"powerT1SW"],
 	      resultsMatRegular05Limma[,"powerT1"],resultsMatSW05Limma[,"powerT1SW"],
 	      resultsMatRegular10Limma[,"powerT1"],resultsMatSW10Limma[,"powerT1SW"]),
-	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", ylab="Main effect power", main="")
+	      boxwex=.2, at=rep(c(0.3,1.1,1.9),each=2)+rep(c(-.1,.1),3), border=rep(c("steelblue","orange"),3), col=alpha(rep(c("steelblue","orange"),3),.2), xaxt="n", ylab="Power main effect", main="")
 axis(1,at=c(0.3,1.1,1.9), labels=c("1%","5%","10%"))
 abline(v=c(0.7,1.5),col=alpha("grey",.8))
 legend("bottomright",c("Conventional","Stage-wise"),lty=1,col=c("steelblue","orange"), bty="n", cex=1.25, lwd=2)
-mtext("False dicovery rate cut-off", side=1, outer=TRUE,line=-2,cex=1.75)
+mtext("False discovery rate cut-off", side=1, outer=TRUE,line=-2,cex=1.75)
 
 
 
